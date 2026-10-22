@@ -7,9 +7,11 @@
  * edges such that the path from any leaf to the root contains at most log(n)
  * light edges. Code does additive modifications and max queries, but can
  * support commutative segtree modifications/queries on paths and subtrees.
- * Takes as input the full adjacency list. VALS\_EDGES being true means that
- * values are stored in the edges, as opposed to the nodes. All values
- * initialized to the segtree default. Root must be 0.
+ * Takes as input the full adjacency list. valsEdges = true means that
+ * values are stored in the edges, as opposed to the nodes (edge
+ * (v, par[v]) lives at pos[v]). All values initialized to the segtree
+ * default. Root must be 0.
+ * Usage: HLD h(adj); h.modifyPath(u, v, x); h.queryPath(u, v);
  * Time: O((\log N)^2)
  * Status: stress-tested against old HLD
  */
@@ -17,17 +19,18 @@
 
 #include "../data-structures/LazySegmentTree.h"
 
-template <bool VALS_EDGES> struct HLD {
-	int N, tim = 0;
-	vector<vi> adj;
-	vi par, siz, rt, pos;
+struct HLD {
+	int N, tim = 0; bool VALS_EDGES;
+	vector<vector<int>> adj;
+	vector<int> par, siz, rt, pos;
 	Node *tree;
-	HLD(vector<vi> adj_)
-		: N(sz(adj_)), adj(adj_), par(N, -1), siz(N, 1),
-		  rt(N),pos(N),tree(new Node(0, N)){ dfsSz(0); dfsHld(0); }
+	HLD(vector<vector<int>> adj_, bool valsEdges = false)
+		: N(adj_.size()), VALS_EDGES(valsEdges), adj(adj_),
+			par(N, -1), siz(N, 1),
+			rt(N),pos(N),tree(new Node(0, N)){ dfsSz(0); dfsHld(0); }
 	void dfsSz(int v) {
 		for (int& u : adj[v]) {
-			adj[u].erase(find(all(adj[u]), v));
+			adj[u].erase(find(adj[u].begin(), adj[u].end(), v));
 			par[u] = v;
 			dfsSz(u);
 			siz[v] += siz[u];
@@ -41,7 +44,7 @@ template <bool VALS_EDGES> struct HLD {
 			dfsHld(u);
 		}
 	}
-	template <class B> void process(int u, int v, B op) {
+	void process(int u, int v, function<void(int,int)> op) {
 		for (;; v = par[rt[v]]) {
 			if (pos[u] > pos[v]) swap(u, v);
 			if (rt[u] == rt[v]) break;

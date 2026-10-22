@@ -2,41 +2,12 @@
 
 #include "../../content/geometry/Point.h"
 
-template<>
-struct Point<double> {
-	typedef Point P;
-	typedef double T;
-	T x, y;
-	explicit Point(T x=0, T y=0) : x(x), y(y) {}
-	Point(const Point<ll>& other) : x((double)other.x), y((double)other.y) {}
-	P& operator=(const Point<ll>& other) { x = (double)other.x; y = (double)other.y; return *this; }
-	bool operator==(const Point<ll>& other) const { return *this == P(other); }
-	bool operator<(P p) const { return x<p.x||(x==p.x && y<p.y);}
-	bool operator==(P p) const { return x==p.x && y==p.y; }
-	P operator+(P p) const { return P(x+p.x, y+p.y); }
-	P operator-(P p) const { return P(x-p.x, y-p.y); }
-	P operator*(T d) const { return P(x*d, y*d); }
-	P operator/(T d) const { return P(x/d, y/d); }
-	T dot(P p) const { return x*p.x + y*p.y; }
-	T cross(P p) const { return x*p.y - y*p.x; }
-	T cross(P a, P b) const { return (a-*this).cross(b-*this); }
-	T dist2() const { return x*x + y*y; }
-	double dist() const { return sqrt((double)dist2()); }
-	// angle to x-axis in interval [-pi, pi]
-	double angle() const { return atan2(y, x); }
-	P unit() const { return *this/dist(); } // makes dist()=1
-	P perp() const { return P(-y, x); } // rotates +90 degrees
-	P normal() const { return perp().unit(); }
-	// returns point rotated 'a' radians ccw around the origin
-	P rotate(double a) const {
-		return P(x*cos(a)-y*sin(a),x*sin(a)+y*cos(a)); }
-};
 
 #include "../../content/geometry/ConvexHull.h"
 #include "../../content/geometry/LineHullIntersection.h"
 
 int segmentIntersection(const P& s1, const P& e1,
-		const P& s2, const P& e2, Point<double>& r1, Point<double>& r2) {
+		const P& s2, const P& e2, P& r1, P& r2) {
 	if (e1==s1) {
 		if (e2==s2) {
 			if (e1==e2) { r1 = e1; return 1; } //all equal
@@ -58,8 +29,7 @@ int segmentIntersection(const P& s1, const P& e1,
 	if (a < 0) { a = -a; a1 = -a1; a2 = -a2; }
 	if (0<a1 || a<-a1 || 0<a2 || a<-a2)
 		return 0;
-	typedef Point<double> PD;
-	r1 = PD(s1) - PD(v1*a2)/(double)a;
+	r1 = s1 - (v1*a2)/a;
 	return 1;
 }
 
@@ -97,9 +67,9 @@ int main() {
 #define FAIL() fail(__LINE__)
 
 		int any = 0, gen = 0, corner = -1, waspar = 0;
-		vector<pair<Point<double>, int>> hits;
+		vector<pair<P, int>> hits;
 		rep(iter,0,2) rep(i,0,N) {
-			Point<double> r1, r2;
+			P r1, r2;
 			int j = (i+1) % N;
 			int qu = segmentIntersection(farp, farq, ps[i], ps[j], r1, r2);
 			if (qu && (q - p).cross(ps[j] - ps[i]) == 0) { // parallel
@@ -158,8 +128,8 @@ int main() {
 			assert(hits[0].second != hits[1].second);
 			assert(hits[0].second == r.first || hits[0].second == r.second);
 			assert(hits[1].second == r.first || hits[1].second == r.second);
-			double dist0 = (hits[0].first - Point<double>(p)).dot(delta);
-			double dist1 = (hits[1].first - Point<double>(p)).dot(delta);
+			double dist0 = (hits[0].first - P(p)).dot(delta);
+			double dist1 = (hits[1].first - P(p)).dot(delta);
 			if (hits[0].second == r.first) {
 				if (!(dist0 <= dist1)) FAIL();
 			}

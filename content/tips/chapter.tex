@@ -1,0 +1,152 @@
+\chapter{Tips \& tricks}
+\setlist[itemize]{leftmargin=1em, noitemsep, topsep=1pt}
+
+\section{Constraints $\to$ complexity}
+About $10^8$--$10^9$ simple operations per second.
+\begin{center}\small
+\begin{tabular}{r|l}
+$n \le 10$ & $O(n!\, n)$, brute force / permutations \\
+$n \le 20$ & $O(2^n n)$, bitmask DP, $O(3^n)$ submasks up to $\sim 15$ \\
+$n \le 40$ & meet in the middle, $O(2^{n/2})$ \\
+$n \le 500$ & $O(n^3)$: Floyd, interval DP, Hungarian \\
+$n \le 5000$ & $O(n^2)$, $O(n^2 \log n)$ \\
+$n \le 10^6$ & $O(n \log n)$, $O(n \log^2 n)$, $O(n\sqrt n)$ up to $2\cdot 10^5$ \\
+$n \le 10^8$ & $O(n)$, sieve, two pointers \\
+$n \le 10^{18}$ & $O(\sqrt n)$, $O(\log n)$: math, matrix power, digits
+\end{tabular}
+\end{center}
+
+\section{If you see \dots{} think of \dots}
+\begin{itemize}
+	\item \textbf{``minimize the maximum'' / monotone answer:} binary search on the answer;
+		for reals iterate 60--100 times instead of \texttt{while (r-l > eps)}.
+	\item \textbf{Many binary searches over the same updates:} parallel binary search.
+	\item \textbf{Sum over all pairs/subarrays:} contribution technique (count how often each
+		element contributes; monotonic stack for ``is the minimum of'' counts).
+	\item \textbf{Expected value:} linearity of expectation with indicator variables (no independence needed);
+		DP backwards from the end; cyclic dependencies $\to$ linear system.
+	\item \textbf{Counting with conditions:} complement, inclusion--exclusion, Burnside for symmetry,
+		Möbius over gcd ($\sum_{d|g}\mu(d) = [g = 1]$).
+	\item \textbf{Greedy ordering:} exchange argument; compare $a_ib_j < a_jb_i$ by cross-multiplication.
+	\item \textbf{Queries offline:} sort them; process deletions in reverse as insertions (DSU);
+		Mo's algorithm; divide \& conquer over time (DynamicConnectivity, CDQ for 3D dominance).
+	\item \textbf{Merging sets on a tree:} small-to-large (move the smaller set into the larger: $O(n\log n)$
+		moves); subtree = contiguous range in Euler tour order (tin/tout).
+	\item \textbf{Paths in a tree:} LCA, $d(u,v) = d_u + d_v - 2d_{lca}$; all paths through a point:
+		centroid decomposition; path updates: HLD; dynamic tree: LinkCutTree.
+	\item \textbf{DP over all roots:} rerooting: down[] by DFS, then up[] using prefix/suffix
+		combinations of the children of each vertex.
+	\item \textbf{Shortest paths:} 0/1 weights: deque BFS; small weights: bucket queue;
+		state graph (vertex, extra info); negative edges: Bellman--Ford or potentials (Johnson);
+		exactly $k$ edges: min-plus matrix power; ``maximize the minimum edge'': max spanning tree.
+	\item \textbf{Matching/assignment/``choose with conflicts'':} bipartite matching, König, flows, min cut
+		(see Graph/Math), 2-SAT for binary choices with pairwise constraints.
+	\item \textbf{Manhattan distance:} $(x, y) \to (x+y, x-y)$ turns $L_1$ into $L_\infty$;
+		$\max |x_i-x_j|+|y_i-y_j|$: max minus min of $\pm x \pm y$.
+	\item \textbf{Linear recurrence / huge $n$:} matrix power, Berlekamp--Massey from brute-forced
+		small values, then LinearRecurrence.
+	\item \textbf{XOR of subsets:} XorBasis (Gaussian elimination over $\mathbb F_2$);
+		max xor of a pair/range: binary trie.
+	\item \textbf{Strings equality/periods:} hashing; period $p = n - \pi[n-1]$ (KMP) is a full period iff $p \mid n$;
+		distinct substrings: suffix automaton or $\sum (n - sa_i) - lcp_i$.
+	\item \textbf{Games:} Sprague--Grundy: $g = \text{mex}$ of successors, sum of games = xor;
+		Nim: first player wins iff xor $\ne 0$; misère Nim: same unless all piles $\le 1$ (then parity flips);
+		staircase Nim: xor of odd steps; look for patterns by brute force.
+	\item \textbf{Geometry:} keep integers and cross products as long as possible; angular sort with
+		half-plane + cross (Angle); Pick's theorem for lattice points; rotating calipers; sweep line with events.
+	\item \textbf{Randomization:} shuffle input against adversarial order; random 64-bit value per element and
+		xor/sum to hash (multi)sets; random pivots; Zobrist hashing of states.
+	\item \textbf{Bitset} speedups: transitive closure/reachability in $O(n^3/64)$, subset sums, LCS (BitsetLCS).
+	\item \textbf{Few distinct values:} $\lfloor n/i \rfloor$ takes $O(\sqrt n)$ values;
+		positive integers with total sum $n$ take $O(\sqrt n)$ distinct values; heavy/light split at $\sqrt m$
+		(e.g. triangles in $O(m\sqrt m)$: orient edges from low to high degree).
+	\item \textbf{Interactive:} flush after every query (\texttt{cout <{}< endl} or \texttt{fflush(stdout)}); count queries.
+	\item \textbf{Stuck:} brute force small cases and look at the numbers; solve the special case
+		(tree, path, $k = 1$); reverse time; think about the answer's structure/invariant.
+\end{itemize}
+
+\section{C++ pitfalls}
+\begin{itemize}
+	\item \textbf{Overflow:} \texttt{1 <{}< 40} $\to$ \texttt{1LL <{}< 40}; \texttt{ll x = a * b} with int a, b
+		overflows first: \texttt{(ll)a * b}; \texttt{accumulate(v.begin(), v.end(), 0)} sums in int: use \texttt{0LL};
+		\texttt{\_\_builtin\_popcount/clz/ctz} are 32-bit: use the \texttt{ll} versions;
+		\texttt{\_\_builtin\_clz(0)} is undefined; products of two values $\le 10^{18}$: \texttt{\_\_int128}.
+	\item \textbf{INF:} use $\sim$\texttt{LLONG\_MAX/4} or \texttt{1e18} so that \texttt{INF + INF} and \texttt{INF + w}
+		don't overflow; \texttt{memset(a, 0x3f, ...)} gives $1.06\cdot10^9$ per int (sum of two fits), but
+		$4.5\cdot 10^{18}$ per \texttt{ll} (sum overflows).
+	\item \textbf{Division:} rounds toward zero: \texttt{-7/2 == -3}, \texttt{-7\%2 == -1}; floor:
+		\texttt{a/b - ((a\%b != 0) \&\& ((a<0) != (b<0)))}; mod: \texttt{((a\%m)+m)\%m};
+		\texttt{x\%2 == 1} is false for negative odd \texttt{x}: use \texttt{x \& 1}.
+	\item \textbf{Binary search:} \texttt{(l + r) / 2} rounds toward zero for negatives $\to$ infinite loops:
+		use \texttt{l + (r - l) / 2} or \texttt{(l + r) >{}> 1} (floor); also avoids \texttt{l + r} overflow.
+	\item \textbf{Unsigned sizes:} \texttt{v.size() - 1} is huge when empty: use \texttt{(int)v.size() - 1}.
+	\item \textbf{Precedence:} \texttt{a \& b == c} is \texttt{a \& (b == c)}; \texttt{1 <{}< n - 1} is \texttt{1 <{}< (n-1)};
+		parenthesize bit operations. Shifting by $\ge$ the width is undefined.
+	\item \textbf{Floating point:} never compare with \texttt{==}; clamp before \texttt{acos/asin/sqrt}
+		(\texttt{acos(min(1.0, max(-1.0, x)))}); \texttt{cout} prints 6 significant digits by default:
+		\texttt{cout <{}< fixed <{}< setprecision(10)}; avoid printing \texttt{-0.000}; \texttt{long double}
+		needs \texttt{\%Lf}; \texttt{pow(10, k)} and \texttt{sqrt(n)} on integers are inexact:
+		\texttt{ll r = sqrtl(n); while (r*r > n) r--; while ((r+1)*(r+1) <= n) r++;};
+		rounding: \texttt{llround(x)}; eps comparisons break sort comparators.
+	\item \textbf{STL:} sort comparators must be strict (\texttt{<=} is undefined behavior and can crash);
+		\texttt{lower\_bound(s.begin(), s.end(), x)} on a set is $O(n)$, use \texttt{s.lower\_bound(x)};
+		\texttt{m[key]} inserts a default value, use \texttt{count/find} to test;
+		erase while iterating: \texttt{it = s.erase(it)}; \texttt{multiset::erase(x)} removes \emph{all}
+		copies, use \texttt{erase(find(x))}; \texttt{priority\_queue} is a max-heap
+		(\texttt{greater<>} for min); \texttt{vector<bool>} elements are proxies;
+		\texttt{next\_permutation} needs a sorted start; \texttt{unordered\_map} can be hacked/slow: HashMap.
+	\item \textbf{Strings:} \texttt{s = s + c} copies (quadratic): use \texttt{s += c}; \texttt{substr} copies;
+		\texttt{getline} after \texttt{cin >{}> x} reads an empty rest of line: \texttt{cin >{}> ws} first;
+		index arrays with \texttt{(unsigned char)c}.
+	\item \textbf{Multiple test cases:} reset \emph{all} global state, but only the used part (resetting a $10^6$
+		array per test case is TLE); don't stop reading input early when the answer is known.
+	\item \textbf{Stack:} deep recursion (DFS on a path of $10^6$ vertices) may overflow; local big arrays
+		belong in global scope; \texttt{function<>} lambdas have bigger frames; locally run
+		\texttt{ulimit -s unlimited}. Bigger stack inside the program (Linux):
+\begin{lstlisting}
+#include <ucontext.h>
+static char stk[1 << 28]; // 256 MB, only used pages count
+int main() { // solve() is the real main
+	ucontext_t c, back; getcontext(&c);
+	c.uc_stack.ss_sp = stk; c.uc_stack.ss_size = sizeof stk;
+	c.uc_link = &back; makecontext(&c, solve, 0);
+	swapcontext(&back, &c);
+}
+\end{lstlisting}
+	\item \textbf{\#define int long long} (our template): every \texttt{int} is 64-bit, so \texttt{int}
+		arrays take twice the memory ($10^7$ ints = 80 MB) and are slower; literals are still 32-bit:
+		\texttt{max(x, 0)} with \texttt{int x} does not compile (\texttt{max(x, 0LL)} or
+		\texttt{max<int>(x, 0)}), \texttt{1 <{}< 40} still overflows; functional casts \texttt{int(x)} do not
+		compile (use \texttt{(int)x}); \texttt{INT\_MAX} is no longer the max of \texttt{int}
+		(\texttt{LLONG\_MAX}); \texttt{\_\_builtin\_popcount/clz/ctz} silently truncate to 32 bits (use the
+		\texttt{ll} versions); \texttt{scanf/printf} need \texttt{\%lld}; \emph{every} \texttt{\#include}
+		(\texttt{<bits/extc++.h>}, \texttt{<cassert>}, \dots) must come \emph{before} the define,
+		otherwise system headers break (``long long long'', \texttt{\_\_assert\_fail}).
+	\item \textbf{Recursive lambdas:} \texttt{auto f = [\&](auto\&\& self, int v) -> void \{ ... self(self, u); \};
+		f(f, 0);} (faster than \texttt{function<>}).
+	\item \textbf{I/O:} \texttt{endl} flushes (slow, but required in interactive problems), use
+		\texttt{'\textbackslash n'}; after \texttt{sync\_with\_stdio(0)} don't mix \texttt{cin} with \texttt{scanf};
+		\texttt{\%lld} for \texttt{ll}; print \texttt{\_\_int128} by converting to a string by hand.
+	\item \textbf{Randomness:} \texttt{rand()} has \texttt{RAND\_MAX} $= 32767$ on Windows:
+\begin{lstlisting}
+mt19937 rng(chrono::steady_clock::now()
+	.time_since_epoch().count());
+int x = uniform_int_distribution<int>(l, r)(rng);
+\end{lstlisting} \texttt{random\_shuffle} is deprecated (removed in C++17):
+		\texttt{shuffle(v.begin(), v.end(), rng)}.
+	\item \textbf{Headers:} newer GCC (seen with 16.x) no longer includes \texttt{<cassert>} in
+		\texttt{<bits/stdc++.h>}: if \texttt{assert} is ``not declared'', include it.
+		\texttt{min(a, b)} with \texttt{int} and \texttt{ll} does not compile: \texttt{min<ll>(a, b)}.
+	\item \textbf{Misc:} \texttt{lcm} overflow: \texttt{a / gcd(a, b) * b}; \texttt{\_\_gcd}/\texttt{gcd} with
+		negative numbers; \texttt{abs(INT\_MIN)} is undefined; global arrays are zero-initialized, local ones
+		are not; check the output format (spaces, newlines, case, ``YES''/``Yes'').
+\end{itemize}
+
+\section{Contest strategy}
+\begin{itemize}
+	\item Read all problems early; sort by difficulty (scoreboard helps); one person on the keyboard,
+		others solve on paper; print code instead of debugging at the keyboard.
+	\item Before coding: write the algorithm and its complexity, check it against the limits,
+		check the extremes ($n = 1$, all equal, maximum values, empty input).
+	\item Wrong answer: see troubleshoot.txt; write a brute force + generator and use stress.sh.
+\end{itemize}

@@ -57,9 +57,11 @@ int main() {
 				}
 			}
 			vi comp2 = old::scc(adj);
-			scc(adj, [&](vi& v) {
-				compsize[ncomps] = sz(v);
-			});
+			scc(adj);
+			assert(sz(comps) == ncomps);
+			rep(c,0,ncomps) for (int v : comps[c]) assert(comp[v] == c);
+			int tot = 0; for (auto& c : comps) tot += sz(c);
+			assert(tot == N);
 			if (comp != comp2) {
 				for(auto &x: comp) cout << x << ' ';
 				cout << endl;

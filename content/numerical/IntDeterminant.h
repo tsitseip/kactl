@@ -4,6 +4,7 @@
  * Source: somewhere on github
  * Description: Calculates determinant using modular arithmetics.
  * Modulos can also be removed to get a pure-integer version.
+ * Usage: ll d = det(a); // modulo the const mod; destroys a
  * Time: $O(N^3)$
  * Status: bruteforce-tested for N <= 3, mod <= 7
  */
@@ -11,12 +12,12 @@
 
 const ll mod = 12345;
 ll det(vector<vector<ll>>& a) {
-	int n = sz(a); ll ans = 1;
-	rep(i,0,n) {
-		rep(j,i+1,n) {
+	int n = a.size(); ll ans = 1;
+	for (int i = 0; i < n; i++) {
+		for (int j = i+1; j < n; j++) {
 			while (a[j][i] != 0) { // gcd step
 				ll t = a[i][i] / a[j][i];
-				if (t) rep(k,i,n)
+				if (t) for (int k = i; k < n; k++)
 					a[i][k] = (a[i][k] - a[j][k] * t) % mod;
 				swap(a[i], a[j]);
 				ans *= -1;

@@ -47,8 +47,11 @@ def ordoescape(input, esc=True):
     return input
 
 def addref(caption, outstream):
+    name = caption.strip()
+    if not name.startswith('.'):
+        name = name.rsplit('.', 1)[0]
     caption = pathescape(caption).strip()
-    print(r"\kactlref{%s}" % caption, file=outstream)
+    print(r"\kactlref{%s}{%s}" % (caption, pathescape(name)), file=outstream)
     with open('header.tmp', 'a') as f:
         f.write(caption + "\n")
 
@@ -145,14 +148,9 @@ def processwithcomments(caption, instream, outstream, listingslang):
         nsource = nsource.rstrip() + source[end:]
     nsource = nsource.strip()
 
-    if listingslang in ['C++', 'Java']:
-        hash_script = 'hash'
-        p = subprocess.Popen(['sh', 'content/contest/%s.sh' % hash_script], stdin=subprocess.PIPE, stdout=subprocess.PIPE, encoding="utf-8")
-        hsh, _ = p.communicate(nsource)
-        hsh = hsh.split(None, 1)[0]
-        hsh = hsh + ', '
-    else:
-        hsh = ''
+    # We don't type-check with hash.sh, so no hash in the caption.
+    # (Upstream KACTL ran content/contest/hash.sh on nsource here.)
+    hsh = ''
     # Produce output
     out = []
     if warning:

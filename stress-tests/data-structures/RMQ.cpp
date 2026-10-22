@@ -9,7 +9,7 @@ int main() {
 		vi v(N);
 		rep(i,0,N) v[i] = i;
 		shuffle_vec(v);
-		RMQ<int> rmq(v);
+		RMQ rmq(v);
 		rep(i,0,N) rep(j,i+1,N+1) {
 			int m = rmq.query(i,j);
 			int n = 1 << 29;

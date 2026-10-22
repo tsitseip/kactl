@@ -30,7 +30,7 @@ int main() {
 		for(auto &x: a) x = ra() % mod;
 		for(auto &x: b) x = ra() % mod;
 		auto v1 = simpleConv(a, b);
-		auto v2 = convMod<mod>(a, b);
+		auto v2 = convMod(a, b, mod);
 		assert(v1 == v2);
 	}
 	cout<<"Tests passed!"<<endl;

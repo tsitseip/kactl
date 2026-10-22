@@ -6,6 +6,7 @@
  * Description: Data structure for computing lowest common ancestors in a tree
  * (with 0 as root). C should be an adjacency list of the tree, either directed
  * or undirected.
+ * Usage: LCA L(adj); int c = L.lca(a, b);
  * Time: $O(N \log N + Q)$
  * Status: stress-tested
  */
@@ -15,11 +16,12 @@
 
 struct LCA {
 	int T = 0;
-	vi time, path, ret;
-	RMQ<int> rmq;
+	vector<int> time, path, ret;
+	RMQ rmq;
 
-	LCA(vector<vi>& C) : time(sz(C)), rmq((dfs(C,0,-1), ret)) {}
-	void dfs(vector<vi>& C, int v, int par) {
+	LCA(vector<vector<int>>& C) :
+			time(C.size()), rmq((dfs(C, 0, -1), ret)) {}
+	void dfs(vector<vector<int>>& C, int v, int par) {
 		time[v] = T++;
 		for (int y : C[v]) if (y != par) {
 			path.push_back(v), ret.push_back(time[v]);

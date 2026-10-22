@@ -11,7 +11,7 @@
 #include "../../content/graph/MinCostMaxFlow.h"
 #undef assert
 #undef setpi
-#include <cassert>
+#define assert(e) ((e) ? (void)0 : abort())
 #include "MinCostMaxFlow2.h"
 
 struct MCMF2 {

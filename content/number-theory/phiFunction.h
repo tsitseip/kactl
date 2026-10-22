@@ -13,6 +13,7 @@
  * \textbf{Euler's thm}: $a,n$ coprime $\Rightarrow a^{\phi(n)} \equiv 1 \pmod{n}$.
  *
  * \textbf{Fermat's little thm}: $p$ prime $\Rightarrow a^{p-1} \equiv 1 \pmod{p}$ $\forall a$.
+ * Usage: calculatePhi(); // then phi[i] for i < LIM
  * Status: Tested
  */
 #pragma once
@@ -21,7 +22,7 @@ const int LIM = 5000000;
 int phi[LIM];
 
 void calculatePhi() {
-	rep(i,0,LIM) phi[i] = i&1 ? i : i/2;
+	for (int i = 0; i < LIM; i++) phi[i] = i&1 ? i : i/2;
 	for (int i = 3; i < LIM; i += 2) if(phi[i] == i)
 		for (int j = i; j < LIM; j += i) phi[j] -= phi[j] / i;
 }

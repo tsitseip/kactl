@@ -107,7 +107,7 @@ ull rand_u64() {
 #define main1 main
 
 // Correctness
-int main1() {
+int32_t main1() {
 	const int bflim = 3000;
 	rep(a,0,bflim) rep(b,2,bflim) {
 		FastMod bar(b);

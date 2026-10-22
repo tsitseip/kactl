@@ -5,6 +5,8 @@
  * Source: own work
  * Description: Container where you can add lines of the form kx+m, and query maximum values at points x.
  *  Useful for dynamic programming (``convex hull trick'').
+ * Usage: LineContainer lc; lc.add(k, m); ll y = lc.query(x);
+ *  // max of k*x + m; for min negate k, m and y
  * Time: O(\log N)
  * Status: stress-tested
  */

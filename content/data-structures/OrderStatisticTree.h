@@ -5,20 +5,24 @@
  * Source: hacKIT, NWERC 2015
  * Description: A set (not multiset!) with support for finding the n'th
  * element, and finding the index of an element.
- * To get a map, change \texttt{null\_type}.
+ * To get a map, change \texttt{null\_type} to the value type.
+ * For a multiset, store pairs (value, unique id).
+ * Usage: Tree t; t.insert(x); t.order_of_key(x); // count < x
+ *  *t.find_by_order(k); // k-th smallest, 0-based
  * Time: O(\log N)
  */
 #pragma once
 
-#include <bits/extc++.h> /** keep-include */
+#include <bits/extc++.h> /** keep-include */ // above #define int
+
 using namespace __gnu_pbds;
 
-template<class T>
-using Tree = tree<T, null_type, less<T>, rb_tree_tag,
-    tree_order_statistics_node_update>;
+// key type int; for pairs/ll replace both ints
+typedef tree<int, null_type, less<int>, rb_tree_tag,
+		tree_order_statistics_node_update> Tree;
 
 void example() {
-	Tree<int> t, t2; t.insert(8);
+	Tree t, t2; t.insert(8);
 	auto it = t.insert(10).first;
 	assert(it == t.lower_bound(9));
 	assert(t.order_of_key(10) == 1);

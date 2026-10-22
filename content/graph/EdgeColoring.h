@@ -8,17 +8,18 @@
  * $(D + 1)$-coloring of the edges such that no neighboring edges share a color.
  * ($D$-coloring is NP-hard, but can be done for bipartite graphs by repeated matchings of
  * max-degree nodes.)
+ * Usage: vector<int> col = edgeColoring(n, eds); // col[i] in [0, maxdeg]
  * Time: O(NM)
  * Status: stress-tested, tested on kattis:gamescheduling
  */
 #pragma once
 
-vi edgeColoring(int N, vector<pii> eds) {
-	vi cc(N + 1), ret(sz(eds)), fan(N), free(N), loc;
-	for (pii e : eds) ++cc[e.first], ++cc[e.second];
-	int u, v, ncols = *max_element(all(cc)) + 1;
-	vector<vi> adj(N, vi(ncols, -1));
-	for (pii e : eds) {
+vector<int> edgeColoring(int N, vector<pair<int, int>> eds) {
+	vector<int> cc(N + 1), ret(eds.size()), fan(N), free(N), loc;
+	for (pair<int, int> e : eds) ++cc[e.first], ++cc[e.second];
+	int u, v, ncols = *max_element(cc.begin(), cc.end()) + 1;
+	vector<vector<int>> adj(N, vector<int>(ncols, -1));
+	for (pair<int, int> e : eds) {
 		tie(u, v) = e;
 		fan[0] = v;
 		loc.assign(ncols, 0);
@@ -40,7 +41,7 @@ vi edgeColoring(int N, vector<pii> eds) {
 		for (int y : {fan[0], u, end})
 			for (int& z = free[y] = 0; adj[y][z] != -1; z++);
 	}
-	rep(i,0,sz(eds))
+	for (int i = 0; i < eds.size(); i++)
 		for (tie(u, v) = eds[i]; adj[u][ret[i]] != v;) ++ret[i];
 	return ret;
 }

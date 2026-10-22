@@ -1,0 +1,184 @@
+% Table of integrals, from foreverbell's acm-icpc-cheat-sheet (integrals.tex),
+% with errors fixed (e^{ax}, mu != -1, arcsin arguments, signs, reduction
+% formula for cos^m sin^n). Constants of integration omitted.
+\newcommand{\md}{\,\mathrm{d}}
+\newcommand{\integ}[1]{\par\noindent\hangindent=2em\hangafter=1$\displaystyle #1$\par\vspace{1pt}}
+
+\section{Table of integrals}
+\small
+\setlength{\parskip}{0pt}
+
+\subsubsection{$ax+b$ ($a \neq 0$)}
+\integ{\int \frac{\md x}{ax+b} = \frac{1}{a} \ln |ax+b|}
+\integ{\int (ax+b)^{\mu} \md x = \frac{(ax+b)^{\mu+1}}{a(\mu+1)} \ (\mu \neq -1)}
+\integ{\int \frac{x\md x}{ax+b} = \frac{1}{a^2} (ax+b-b\ln|ax+b|)}
+\integ{\int \frac{x^2\md x}{ax+b} = \frac{1}{a^3} \left( \tfrac{1}{2}(ax+b)^2-2b(ax+b)+b^2\ln|ax+b| \right)}
+\integ{\int \frac{\md x}{x(ax+b)} = -\frac{1}{b}\ln \left| \frac{ax+b}{x} \right|}
+\integ{\int \frac{\md x}{x^2(ax+b)} = -\frac{1}{bx} + \frac{a}{b^2}\ln\left| \frac{ax+b}{x} \right|}
+\integ{\int \frac{x\md x}{(ax+b)^2} = \frac{1}{a^2}\left( \ln|ax+b|+\frac{b}{ax+b} \right)}
+\integ{\int \frac{x^2\md x}{(ax+b)^2} = \frac{1}{a^3} \left( ax+b-2b\ln|ax+b|-\frac{b^2}{ax+b} \right)}
+\integ{\int \frac{\md x}{x(ax+b)^2} = \frac{1}{b(ax+b)} - \frac{1}{b^2}\ln\left| \frac{ax+b}{x} \right|}
+
+\subsubsection{$\sqrt{ax+b}$}
+\integ{\int \sqrt{ax+b} \md x = \frac{2}{3a} \sqrt{(ax+b)^3}}
+\integ{\int x \sqrt{ax+b} \md x = \frac{2}{15a^2}(3ax-2b) \sqrt{(ax+b)^3}}
+\integ{\int x^2 \sqrt{ax+b} \md x = \frac{2}{105a^3}(15a^2x^2-12abx+8b^2)\sqrt{(ax+b)^3}}
+\integ{\int \frac{x\md x}{\sqrt{ax+b}} = \frac{2}{3a^2} (ax-2b) \sqrt{ax+b}}
+\integ{\int \frac{x^2\md x}{\sqrt{ax+b}} = \frac{2}{15a^3} (3a^2x^2 - 4abx + 8b^2) \sqrt{ax+b}}
+\integ{\int \frac{\md x}{x\sqrt{ax+b}} = \begin{cases}
+\frac{1}{\sqrt{b}}\ln\left| \frac{\sqrt{ax+b} - \sqrt{b}}{\sqrt{ax+b} + \sqrt{b}} \right| & (b>0) \\
+\frac{2}{\sqrt{-b}}\arctan\sqrt{\frac{ax+b}{-b}} & (b<0)
+\end{cases}}
+\integ{\int \frac{\md x}{x^2\sqrt{ax+b}} = -\frac{\sqrt{ax+b}}{bx} - \frac{a}{2b} \int \frac{\md x}{x\sqrt{ax+b}}}
+\integ{\int \frac{\sqrt{ax+b}}{x}\md x = 2\sqrt{ax+b} + b\int\frac{\md x}{x\sqrt{ax+b}}}
+\integ{\int \frac{\sqrt{ax+b}}{x^2}\md x = -\frac{\sqrt{ax+b}}{x} + \frac{a}{2} \int \frac{\md x}{x\sqrt{ax+b}}}
+
+\subsubsection{$x^2 \pm a^2$, $ax^2 + b$ ($a > 0$)}
+\integ{\int \frac{\md x}{x^2 + a^2} = \frac{1}{a} \arctan\frac{x}{a}}
+\integ{\int \frac{\md x}{x^2-a^2} = \frac{1}{2a}\ln\left| \frac{x-a}{x+a} \right|}
+\integ{\int \frac{\md x}{(x^2+a^2)^n} = \frac{x}{2(n-1)a^2(x^2+a^2)^{n-1}}+\frac{2n-3}{2(n-1)a^2} \int \frac{\md x}{(x^2+a^2)^{n-1}}}
+\integ{\int \frac{\md x}{ax^2+b} = \begin{cases}
+\frac{1}{\sqrt{ab}} \arctan \left(\sqrt{\frac{a}{b}}\, x\right) & (b > 0) \\
+\frac{1}{2\sqrt{-ab}} \ln\left| \frac{\sqrt{a}x-\sqrt{-b}}{\sqrt{a}x+\sqrt{-b}} \right| & (b < 0)
+\end{cases}}
+\integ{\int \frac{x\md x}{ax^2+b} = \frac{1}{2a} \ln \left| ax^2 + b \right|}
+\integ{\int \frac{x^2\md x}{ax^2+b} = \frac{x}{a} - \frac{b}{a}\int \frac{\md x}{ax^2+b}}
+\integ{\int \frac{\md x}{x(ax^2+b)} = \frac{1}{2b} \ln \frac{x^2}{|ax^2+b|}}
+\integ{\int \frac{\md x}{x^2(ax^2+b)} = -\frac{1}{bx} - \frac{a}{b} \int \frac{\md x}{ax^2+b}}
+\integ{\int \frac{\md x}{x^3(ax^2+b)} = \frac{a}{2b^2} \ln \frac{|ax^2+b|}{x^2} - \frac{1}{2bx^2}}
+\integ{\int \frac{\md x}{(ax^2+b)^2} = \frac{x}{2b(ax^2+b)} + \frac{1}{2b} \int \frac{\md x}{ax^2+b}}
+
+\subsubsection{$ax^2+bx+c$ ($a>0$)}
+\integ{\int \frac{\md x}{ax^2+bx+c} = \begin{cases}
+\frac{2}{\sqrt{4ac-b^2}}\arctan\frac{2ax+b}{\sqrt{4ac-b^2}} & (b^2 < 4ac) \\
+\frac{1}{\sqrt{b^2-4ac}}\ln\left| \frac{2ax+b-\sqrt{b^2-4ac}}{2ax+b+\sqrt{b^2-4ac}} \right| & (b^2 > 4ac)
+\end{cases}}
+\integ{\int \frac{x\md x}{ax^2+bx+c} = \frac{1}{2a} \ln |ax^2+bx+c| - \frac{b}{2a} \int \frac{\md x}{ax^2+bx+c}}
+
+\subsubsection{$\sqrt{x^2+a^2}$ ($a>0$)}
+\integ{\int \frac{\md x}{\sqrt{x^2+a^2}} = \ln(x + \sqrt{x^2+a^2}) = \operatorname{arsinh}\frac{x}{a} + C}
+\integ{\int \frac{\md x}{\sqrt{(x^2+a^2)^3}} = \frac{x}{a^2\sqrt{x^2+a^2}}}
+\integ{\int \frac{x\md x}{\sqrt{x^2+a^2}} = \sqrt{x^2+a^2}}
+\integ{\int \frac{x\md x}{\sqrt{(x^2+a^2)^3}} = -\frac{1}{\sqrt{x^2+a^2}}}
+\integ{\int \frac{x^2\md x}{\sqrt{x^2+a^2}} = \frac{x}{2}\sqrt{x^2+a^2} - \frac{a^2}{2}\ln(x+\sqrt{x^2+a^2})}
+\integ{\int \frac{x^2\md x}{\sqrt{(x^2+a^2)^3}} = -\frac{x}{\sqrt{x^2+a^2}} + \ln(x+\sqrt{x^2+a^2})}
+\integ{\int \frac{\md x}{x\sqrt{x^2+a^2}} = \frac{1}{a} \ln \frac{\sqrt{x^2+a^2}-a}{|x|}}
+\integ{\int \frac{\md x}{x^2\sqrt{x^2+a^2}} = -\frac{\sqrt{x^2+a^2}}{a^2x}}
+\integ{\int \sqrt{x^2+a^2} \md x = \frac{x}{2}\sqrt{x^2+a^2}+\frac{a^2}{2}\ln(x + \sqrt{x^2+a^2})}
+\integ{\int \sqrt{(x^2+a^2)^3} \md x = \frac{x}{8}(2x^2+5a^2)\sqrt{x^2+a^2} + \frac{3}{8}a^4\ln(x + \sqrt{x^2+a^2})}
+\integ{\int x \sqrt{x^2+a^2} \md x = \frac{1}{3} \sqrt{(x^2+a^2)^3}}
+\integ{\int x^2\sqrt{x^2+a^2} \md x = \frac{x}{8}(2x^2+a^2)\sqrt{x^2+a^2} - \frac{a^4}{8}\ln(x+\sqrt{x^2+a^2})}
+\integ{\int \frac{\sqrt{x^2+a^2}}{x} \md x = \sqrt{x^2+a^2} + a \ln \frac{\sqrt{x^2+a^2}-a}{|x|}}
+\integ{\int \frac{\sqrt{x^2+a^2}}{x^2} \md x = -\frac{\sqrt{x^2+a^2}}{x} + \ln(x + \sqrt{x^2+a^2})}
+
+\subsubsection{$\sqrt{x^2-a^2}$ ($a>0$)}
+\integ{\int \frac{\md x}{\sqrt{x^2-a^2}} = \ln\left|x+\sqrt{x^2-a^2}\right|}
+\integ{\int \frac{\md x}{\sqrt{(x^2-a^2)^3}} = -\frac{x}{a^2\sqrt{x^2-a^2}}}
+\integ{\int \frac{x\md x}{\sqrt{x^2-a^2}} = \sqrt{x^2-a^2}}
+\integ{\int \frac{x\md x}{\sqrt{(x^2-a^2)^3}} = -\frac{1}{\sqrt{x^2-a^2}}}
+\integ{\int \frac{x^2\md x}{\sqrt{x^2-a^2}} = \frac{x}{2}\sqrt{x^2-a^2} + \frac{a^2}{2}\ln|x+\sqrt{x^2-a^2}|}
+\integ{\int \frac{x^2\md x}{\sqrt{(x^2-a^2)^3}} = -\frac{x}{\sqrt{x^2-a^2}} + \ln|x+\sqrt{x^2-a^2}|}
+\integ{\int \frac{\md x}{x\sqrt{x^2-a^2}} = \frac{1}{a} \arccos \frac{a}{|x|}}
+\integ{\int \frac{\md x}{x^2\sqrt{x^2-a^2}} = \frac{\sqrt{x^2-a^2}}{a^2x}}
+\integ{\int \sqrt{x^2-a^2} \md x = \frac{x}{2}\sqrt{x^2-a^2} - \frac{a^2}{2}\ln|x + \sqrt{x^2-a^2}|}
+\integ{\int \sqrt{(x^2-a^2)^3} \md x = \frac{x}{8}(2x^2-5a^2)\sqrt{x^2-a^2} + \frac{3}{8}a^4\ln|x + \sqrt{x^2-a^2}|}
+\integ{\int x \sqrt{x^2-a^2} \md x = \frac{1}{3} \sqrt{(x^2-a^2)^3}}
+\integ{\int x^2\sqrt{x^2-a^2} \md x = \frac{x}{8}(2x^2-a^2)\sqrt{x^2-a^2} - \frac{a^4}{8}\ln|x+\sqrt{x^2-a^2}|}
+\integ{\int \frac{\sqrt{x^2-a^2}}{x} \md x = \sqrt{x^2-a^2} - a \arccos\frac{a}{|x|}}
+\integ{\int \frac{\sqrt{x^2-a^2}}{x^2} \md x = -\frac{\sqrt{x^2-a^2}}{x} + \ln|x + \sqrt{x^2-a^2}|}
+
+\subsubsection{$\sqrt{a^2-x^2}$ ($a>0$)}
+\integ{\int \frac{\md x}{\sqrt{a^2-x^2}} = \arcsin \frac{x}{a}}
+\integ{\int \frac{\md x}{\sqrt{(a^2-x^2)^3}} = \frac{x}{a^2\sqrt{a^2-x^2}}}
+\integ{\int \frac{x\md x}{\sqrt{a^2-x^2}} = -\sqrt{a^2-x^2}}
+\integ{\int \frac{x\md x}{\sqrt{(a^2-x^2)^3}} = \frac{1}{\sqrt{a^2-x^2}}}
+\integ{\int \frac{x^2\md x}{\sqrt{a^2-x^2}} = -\frac{x}{2}\sqrt{a^2-x^2} + \frac{a^2}{2}\arcsin\frac{x}{a}}
+\integ{\int \frac{x^2\md x}{\sqrt{(a^2-x^2)^3}} = \frac{x}{\sqrt{a^2-x^2}} - \arcsin\frac{x}{a}}
+\integ{\int \frac{\md x}{x\sqrt{a^2-x^2}} = \frac{1}{a}\ln\frac{a-\sqrt{a^2-x^2}}{|x|}}
+\integ{\int \frac{\md x}{x^2\sqrt{a^2-x^2}} = -\frac{\sqrt{a^2-x^2}}{a^2x}}
+\integ{\int \sqrt{a^2-x^2}\md x = \frac{x}{2}\sqrt{a^2-x^2} + \frac{a^2}{2}\arcsin\frac{x}{a}}
+\integ{\int \sqrt{(a^2-x^2)^3}\md x = \frac{x}{8}(5a^2-2x^2)\sqrt{a^2-x^2}+\frac{3}{8}a^4\arcsin\frac{x}{a}}
+\integ{\int x\sqrt{a^2-x^2}\md x = -\frac{1}{3}\sqrt{(a^2-x^2)^3}}
+\integ{\int x^2\sqrt{a^2-x^2}\md x = \frac{x}{8}(2x^2-a^2)\sqrt{a^2-x^2}+\frac{a^4}{8}\arcsin\frac{x}{a}}
+\integ{\int \frac{\sqrt{a^2-x^2}}{x}\md x = \sqrt{a^2-x^2} + a \ln \frac{a-\sqrt{a^2-x^2}}{|x|}}
+\integ{\int \frac{\sqrt{a^2-x^2}}{x^2} \md x = -\frac{\sqrt{a^2-x^2}}{x} - \arcsin\frac{x}{a}}
+
+\subsubsection{$\sqrt{\pm ax^2+bx+c}$ ($a>0$)}
+\integ{\int \frac{\md x}{\sqrt{ax^2+bx+c}} = \frac{1}{\sqrt{a}} \ln | 2ax+b+2\sqrt{a}\sqrt{ax^2+bx+c} |}
+\integ{\int \sqrt{ax^2+bx+c} \md x = \frac{2ax+b}{4a}\sqrt{ax^2+bx+c}}
+\integ{\qquad + \frac{4ac-b^2}{8\sqrt{a^3}}\ln |2ax+b+2\sqrt{a}\sqrt{ax^2+bx+c}|}
+\integ{\int \frac{x\md x}{\sqrt{ax^2+bx+c}} = \frac{1}{a}\sqrt{ax^2+bx+c} - \frac{b}{2\sqrt{a^3}}\ln | 2ax+b+2\sqrt{a}\sqrt{ax^2+bx+c} |}
+\integ{\int \frac{\md x}{\sqrt{c+bx-ax^2}} = \frac{1}{\sqrt{a}} \arcsin \frac{2ax-b}{\sqrt{b^2+4ac}}}
+\integ{\int \sqrt{c+bx-ax^2} \md x = \frac{2ax-b}{4a}\sqrt{c+bx-ax^2} + \frac{b^2+4ac}{8\sqrt{a^3}}\arcsin\frac{2ax-b}{\sqrt{b^2+4ac}}}
+\integ{\int \frac{x\md x}{\sqrt{c+bx-ax^2}} = -\frac{1}{a}\sqrt{c+bx-ax^2} + \frac{b}{2\sqrt{a^3}}\arcsin\frac{2ax-b}{\sqrt{b^2+4ac}}}
+
+\subsubsection{$\sqrt{\pm\frac{x-a}{x-b}}$, $\sqrt{(x-a)(b-x)}$}
+\integ{\int \sqrt{\tfrac{x-a}{x-b}} \md x = (x-b)\sqrt{\tfrac{x-a}{x-b}} + (b-a)\ln(\sqrt{|x-a|}+\sqrt{|x-b|})}
+For $a < b$, with $u = \arcsin\sqrt{\frac{x-a}{b-a}}$:
+\integ{\int \sqrt{\tfrac{x-a}{b-x}} \md x = (x-b)\sqrt{\tfrac{x-a}{b-x}} + (b-a)u}
+\integ{\int \frac{\md x}{\sqrt{(x-a)(b-x)}} = 2u}
+\integ{\int \sqrt{(x-a)(b-x)} \md x = \frac{2x-a-b}{4}\sqrt{(x-a)(b-x)} + \frac{(b-a)^2}{4}u}
+
+\subsubsection{Exponentials and logarithms}
+\integ{\int a^x \md x= \frac{a^x}{\ln a}}
+\integ{\int x a^x \md x = \frac{x a^x}{\ln a}-\frac{a^x}{(\ln a)^2}}
+\integ{\int x^n e^{ax} \md x=\frac{1}{a}x^n e^{ax}-\frac{n}{a} \int x^{n-1} e^{ax} \md x}
+\integ{\int x^n a^x \md x= \frac{x^n a^x}{\ln a}-\frac{n}{\ln a}\int x^{n-1}a^x \md x}
+\integ{\int e^{ax} \sin bx \md x = \frac{e^{ax}(a \sin bx - b \cos bx)}{a^2+b^2}}
+\integ{\int e^{ax} \cos bx \md x = \frac{e^{ax}(b \sin bx + a \cos bx)}{a^2+b^2}}
+\integ{\int e^{ax} \sin^n bx \md x=\frac{e^{ax} \sin^{n-1} bx\, (a \sin bx -nb \cos bx)}{a^2+b^2 n^2}}
+\integ{\qquad +\frac{n(n-1)b^2}{a^2+b^2 n^2}\int e^{ax} \sin^{n-2} bx \md x}
+\integ{\int e^{ax} \cos^n bx \md x=\frac{e^{ax} \cos^{n-1} bx\, (a \cos bx +nb \sin bx)}{a^2+b^2 n^2}}
+\integ{\qquad +\frac{n(n-1)b^2}{a^2+b^2 n^2}\int e^{ax} \cos^{n-2} bx \md x}
+\integ{\int \ln x \md x = x \ln x - x}
+\integ{\int \frac{\md x}{x \ln x} =\ln | \ln x |}
+\integ{\int x^n \ln x \md x = \frac{x^{n+1}}{n+1}\left(\ln x - \frac{1}{n+1} \right)}
+\integ{\int (\ln x)^{n} \md x = x(\ln x)^n - n \int (\ln x)^{n-1} \md x}
+\integ{\int x^m(\ln x)^n \md x=\frac{x^{m+1} (\ln x)^n}{m+1} - \frac{n}{m+1} \int x^m(\ln x)^{n-1}\md x}
+
+\subsubsection{Trigonometric functions}
+\integ{\int \tan x \md x = -\ln|\cos x|}
+\integ{\int \cot x \md x = \ln |\sin x|}
+\integ{\int \sec x \md x = \ln |\sec x + \tan x|}
+\integ{\int \csc x \md x = \ln |\csc x - \cot x| = \ln\left|\tan\frac{x}{2}\right|}
+\integ{\int \sec^2 x \md x = \tan x}
+\integ{\int \csc^2 x \md x = -\cot x}
+\integ{\int \sec x \tan x \md x = \sec x}
+\integ{\int \sin^2 x \md x = \frac{x}{2} - \frac{\sin 2x}{4}}
+\integ{\int \cos^2 x \md x = \frac{x}{2} + \frac{\sin 2x}{4}}
+\integ{\int \sin^n x \md x = -\frac{\sin^{n-1} x \cos x}{n} + \frac{n-1}{n} \int \sin^{n-2} x \md x}
+\integ{\int \cos^n x \md x = \frac{\cos^{n-1} x \sin x}{n} + \frac{n-1}{n} \int \cos^{n-2} x \md x}
+\integ{\int \frac{\md x}{\sin^n x} = -\frac{1}{n-1} \frac{\cos x}{\sin^{n-1}x} + \frac{n-2}{n-1} \int \frac{\md x}{\sin^{n-2}x}}
+\integ{\int \frac{\md x}{\cos^n x} = \frac{1}{n-1} \frac{\sin x}{\cos^{n-1}x} + \frac{n-2}{n-1} \int \frac{\md x}{\cos^{n-2}x}}
+\integ{\int \cos^m x \sin^n x \md x = \frac{\cos^{m-1} x \sin^{n+1}x}{m+n} + \frac{m-1}{m+n}\int\cos^{m-2}x\sin^nx\md x}
+\integ{\qquad = -\frac{\cos^{m+1} x \sin^{n-1}x}{m+n} + \frac{n-1}{m+n} \int \cos^m x\sin^{n-2} x \md x}
+\integ{\int \sin ax \cos bx \md x = -\frac{\cos(a+b)x}{2(a+b)} - \frac{\cos(a-b)x}{2(a-b)}}
+\integ{\int \sin ax \sin bx \md x = -\frac{\sin(a+b)x}{2(a+b)} + \frac{\sin(a-b)x}{2(a-b)}}
+\integ{\int \cos ax \cos bx \md x =  \frac{\sin(a+b)x}{2(a+b)} + \frac{\sin(a-b)x}{2(a-b)}}
+\integ{\int \frac{\md x}{a + b \sin x} = \begin{cases}
+\frac{2}{\sqrt{a^2-b^2}}\arctan\frac{a\tan\frac{x}{2}+b}{\sqrt{a^2-b^2}} & (a^2 > b^2) \\
+\frac{1}{\sqrt{b^2-a^2}}\ln \left| \frac{a\tan\frac{x}{2}+b-\sqrt{b^2-a^2}}{a\tan\frac{x}{2}+b+\sqrt{b^2-a^2}} \right| & (a^2 < b^2)
+\end{cases}}
+\integ{\int \frac{\md x}{a + b \cos x} = \begin{cases}
+\frac{2}{\sqrt{a^2-b^2}} \arctan\frac{(a-b)\tan\frac{x}{2}}{\sqrt{a^2-b^2}} & (a^2 > b^2) \\
+\frac{1}{\sqrt{b^2-a^2}} \ln \left| \frac{(a-b)\tan\frac{x}{2}-\sqrt{b^2-a^2}}{(a-b)\tan\frac{x}{2}+\sqrt{b^2-a^2}} \right|
+& (a^2 < b^2)
+\end{cases}}
+\integ{\int \frac{\md x}{a^2\cos^2x+b^2\sin^2x} = \frac{1}{ab} \arctan\left( \frac{b}{a}\tan x \right)}
+\integ{\int \frac{\md x}{a^2\cos^2x-b^2\sin^2x} = \frac{1}{2ab}\ln\left|\frac{b\tan x+a}{b\tan x-a}\right|}
+\integ{\int x \sin ax \md x = \frac{\sin ax}{a^2} - \frac{x \cos ax}{a}}
+\integ{\int x \cos ax \md x = \frac{\cos ax}{a^2} + \frac{x \sin ax}{a}}
+\integ{\int x^2 \sin ax \md x = -\frac{x^2 \cos ax}{a} + \frac{2x \sin ax}{a^2} + \frac{2 \cos ax}{a^3}}
+\integ{\int x^2 \cos ax \md x = \frac{x^2 \sin ax}{a} + \frac{2x \cos ax}{a^2} - \frac{2 \sin ax}{a^3}}
+
+\subsubsection{Inverse trigonometric functions ($a>0$)}
+\integ{\int \arcsin \frac{x}{a} \md x = x \arcsin \frac{x}{a} + \sqrt{a^2-x^2}}
+\integ{\int x \arcsin \frac{x}{a} \md x= \left(\frac{x^2}{2}-\frac{a^2}{4}\right)\arcsin \frac{x}{a} + \frac{x}{4} \sqrt{a^2-x^2}}
+\integ{\int x^2 \arcsin \frac{x}{a} \md x = \frac{x^3}{3}\arcsin \frac{x}{a}+\frac{1}{9}(x^2+2 a^2)\sqrt{a^2-x^2}}
+\integ{\int \arccos \frac{x}{a} \md x= x \arccos \frac{x}{a} - \sqrt{a^2-x^2}}
+\integ{\int x \arccos \frac{x}{a} \md x= \left(\frac{x^2}{2}-\frac{a^2}{4}\right)\arccos \frac{x}{a} - \frac{x}{4} \sqrt{a^2-x^2}}
+\integ{\int x^2 \arccos \frac{x}{a}\md x= \frac{x^3}{3}\arccos \frac{x}{a} - \frac{1}{9}(x^2+2a^2)\sqrt{a^2-x^2}}
+\integ{\int \arctan \frac{x}{a} \md x=x \arctan \frac{x}{a}-\frac{a}{2}\ln (a^2+x^2)}
+\integ{\int x\arctan \frac{x}{a} \md x = \frac{1}{2}(a^2+x^2)\arctan \frac{x}{a} -\frac{a}{2}x}
+\integ{\int x^2 \arctan \frac{x}{a} \md x= \frac{x^3}{3} \arctan \frac{x}{a} - \frac{a}{6}x^2 + \frac{a^3}{6} \ln (a^2+x^2)}
+\normalsize

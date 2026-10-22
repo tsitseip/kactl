@@ -5,21 +5,20 @@
  * Source: me
  * Description: Segment tree with ability to add or set values of large intervals, and compute max of intervals.
  * Can be changed to other things.
- * Use with a bump allocator for better performance, and SmallPtr or implicit indices to save memory.
  * Time: O(\log N).
- * Usage: Node* tr = new Node(v, 0, sz(v));
+ * Usage: Node* tr = new Node(v, 0, (int)v.size()); // or new Node(lo, hi) for
+ *  a sparse tree over [lo, hi) with all -inf (children made on demand)
+ *  tr->add(l, r, x); tr->set(l, r, x); tr->query(l, r); // all [l, r)
  * Status: stress-tested a bit
  */
 #pragma once
-
-#include "../various/BumpAllocator.h"
 
 const int inf = 1e9;
 struct Node {
 	Node *l = 0, *r = 0;
 	int lo, hi, mset = inf, madd = 0, val = -inf;
 	Node(int lo,int hi):lo(lo),hi(hi){} // Large interval of -inf
-	Node(vi& v, int lo, int hi) : lo(lo), hi(hi) {
+	Node(vector<int>& v, int lo, int hi) : lo(lo), hi(hi) {
 		if (lo + 1 < hi) {
 			int mid = lo + (hi - lo)/2;
 			l = new Node(v, lo, mid); r = new Node(v, mid, hi);

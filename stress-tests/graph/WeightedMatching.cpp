@@ -20,7 +20,7 @@ void test(int N, int mxCost, int iters) {
 		for (int i = 0; i < m; i++)
 			mcmf.addEdge(2 + n + i, t, 1, 0);
 
-		vector<vi> cost(n, vi(m));
+		vector<vector<ll>> cost(n, vector<ll>(m));
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				cost[i][j] = randRange(-mxCost, mxCost);

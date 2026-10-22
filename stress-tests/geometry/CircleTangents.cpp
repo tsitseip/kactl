@@ -4,7 +4,6 @@
 #include "../../content/geometry/lineDistance.h"
 #include "../utilities/randGeo.h"
 
-typedef Point<double> P;
 
 signed main() {
 	for (int i = 0; i < 1000000; i++) {

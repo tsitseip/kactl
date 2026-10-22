@@ -7,28 +7,29 @@
  * to contain a minimum spanning tree for the graph with edge weights w(p, q) =
  * |p.x - q.x| + |p.y - q.y|. Edges are in the form (distance, src, dst). Use a
  * standard MST algorithm on the result to find the final MST.
+ * Integer coordinates (T = ll).
+ * Usage: auto e = manhattanMST(pts); // {w, i, j}, then Kruskal
  * Time: O(N \log N)
  * Status: Stress-tested
  */
 #pragma once
 #include "Point.h"
 
-typedef Point<int> P;
-vector<array<int, 3>> manhattanMST(vector<P> ps) {
-	vi id(sz(ps));
-	iota(all(id), 0);
-	vector<array<int, 3>> edges;
-	rep(k,0,4) {
-		sort(all(id), [&](int i, int j) {
+vector<array<ll, 3>> manhattanMST(vector<P> ps) {
+	vector<int> id(ps.size());
+	iota(id.begin(), id.end(), 0);
+	vector<array<ll, 3>> edges;
+	for (int k = 0; k < 4; k++) {
+		sort(id.begin(), id.end(), [&](int i, int j) {
 		     return (ps[i]-ps[j]).x < (ps[j]-ps[i]).y;});
-		map<int, int> sweep;
+		map<T, int> sweep;
 		for (int i : id) {
 			for (auto it = sweep.lower_bound(-ps[i].y);
-				        it != sweep.end(); sweep.erase(it++)) {
+								it != sweep.end(); sweep.erase(it++)) {
 				int j = it->second;
 				P d = ps[i] - ps[j];
 				if (d.y > d.x) break;
-				edges.push_back({d.y + d.x, i, j});
+				edges.push_back({(ll)(d.y + d.x), i, j});
 			}
 			sweep[-ps[i].y] = i;
 		}

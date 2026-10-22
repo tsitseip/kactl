@@ -1,12 +1,12 @@
 #include "../utilities/template.h"
+typedef int T;
+#define POINT_T
 
 #include "../../content/geometry/Point.h"
 #include "../../content/geometry/ManhattanMST.h"
 #include "../../content/data-structures/UnionFind.h"
 
 
-typedef Point<int> P;
-typedef int T;
 T rectilinear_mst_n(vector<P> ps) {
 	struct edge { int src, dst; T weight; };
 	vector<edge> edges;

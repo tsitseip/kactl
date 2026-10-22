@@ -3,51 +3,55 @@
  * Date: 2017-04-17
  * License: CC0
  * Source: folklore
- * Description: Finds all biconnected components in an undirected graph, and
- *  runs a callback for the edges in each. In a biconnected component there
- *  are at least two internally disjoint paths between any two nodes (a cycle
- *  exists through them). Note that a node can be in several components. An
- *  edge which is not in a component is a bridge, i.e., not part of any cycle.
+ * Description: Finds all biconnected components in an undirected
+ *  multigraph, plus bridges and articulation points. In a biconnected
+ *  component there are at least two internally disjoint paths between
+ *  any two nodes (a cycle exists through them). A node can be in
+ *  several components. comps[i] = edge ids of component i. An edge in
+ *  no component is a bridge (not on any cycle). A node is an
+ *  articulation point (isCut) iff removing it disconnects its component.
  * Usage:
  *  int eid = 0; ed.resize(N);
  *  for each edge (a,b) {
  *    ed[a].emplace_back(b, eid);
  *    ed[b].emplace_back(a, eid++); }
- *  bicomps([\&](const vi\& edgelist) {...});
+ *  bicomps(eid); // then read comps, isBridge[e], isCut[v]
  * Time: O(E + V)
- * Status: tested during MIPT ICPC Workshop 2017
+ * Status: stress-tested
  */
 #pragma once
 
-vi num, st;
-vector<vector<pii>> ed;
+vector<int> num, st, isBridge, isCut;
+vector<vector<pair<int, int>>> ed;
+vector<vector<int>> comps;
 int Time;
-template<class F>
-int dfs(int at, int par, F& f) {
-	int me = num[at] = ++Time, top = me;
+int dfs(int at, int par) {
+	int me = num[at] = ++Time, top = me, kids = 0;
 	for (auto [y, e] : ed[at]) if (e != par) {
 		if (num[y]) {
 			top = min(top, num[y]);
 			if (num[y] < me)
 				st.push_back(e);
 		} else {
-			int si = sz(st);
-			int up = dfs(y, e, f);
-			top = min(top, up);
+			int si = st.size();
+			int up = dfs(y, e);
+			top = min(top, up); kids++;
+			if (up >= me && (par != -1 || kids > 1)) isCut[at] = 1;
 			if (up == me) {
 				st.push_back(e);
-				f(vi(st.begin() + si, st.end()));
+				comps.emplace_back(st.begin() + si, st.end());
 				st.resize(si);
 			}
 			else if (up < me) st.push_back(e);
-			else { /* e is a bridge */ }
+			else isBridge[e] = 1;
 		}
 	}
 	return top;
 }
 
-template<class F>
-void bicomps(F f) {
-	num.assign(sz(ed), 0);
-	rep(i,0,sz(ed)) if (!num[i]) dfs(i, -1, f);
+void bicomps(int nedges) {
+	num.assign((int)ed.size(), 0);
+	isCut.assign((int)ed.size(), 0);
+	isBridge.assign(nedges, 0); comps.clear(); Time = 0;
+	for (int i = 0; i < ed.size(); i++) if (!num[i]) dfs(i, -1);
 }

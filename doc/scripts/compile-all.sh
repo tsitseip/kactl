@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 DIR=${1:-.}
 
-# use a precompiled header for the template to improve perf
-g++ -Wall -Wextra -Wfatal-errors -Wconversion -std=c++17 -x c++-header $DIR/content/contest/template.cpp
-trap "rm -f $DIR/content/contest/template.cpp.gch" EXIT
+# (no precompiled header: our template.cpp ends with "#define int long long"
+# and every header is compiled after it, see test-compiles.sh)
 
 SCRIPT_DIR=$DIR/doc/scripts
 tests="$(find $DIR/content -name '*.h' | grep -vFf $SCRIPT_DIR/skip_headers)"

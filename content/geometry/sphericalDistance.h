@@ -9,6 +9,7 @@
  * in radians. The algorithm starts by converting the spherical coordinates to cartesian coordinates
  * so if that is what you have you can use only the two last rows. dx*radius is then the difference
  * between the two points in the x direction and d*radius is the total distance between the points.
+ * Usage: double d = sphericalDistance(phi1, th1, phi2, th2, R);
  * Status: tested on kattis:airlinehub
  */
 #pragma once

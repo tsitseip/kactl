@@ -4,7 +4,7 @@
 #include "../utilities/genPolygon.h"
 
 namespace orig{
-typedef Point<long double> P;
+typedef ::P P;
 long double areaCT(P pa, P pb, long double r) {
 	if (pa.dist() < pb.dist()) swap(pa, pb);
 	if (sgn(pb.dist()) == 0) return 0;
@@ -38,10 +38,10 @@ signed main() {
 	const int lim=5;
 	for (int i=0;i<100000; i++) {
 
-		vector<Point<int>> pts;
+		vector<P> pts;
 		for (int j=0; j<10; j++) {
 			int x = rand()%lim, y = rand()%lim;
-			pts.push_back(Point<int>(x, y));
+			pts.push_back(P(x, y));
 		}
 
 		auto polyInt = genPolygon(pts);

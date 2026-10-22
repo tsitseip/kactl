@@ -8,9 +8,11 @@
 	\kactlimport{ModSum.h}
 	\kactlimport{ModMulLL.h}
 	\kactlimport{ModSqrt.h}
+	\kactlimport{PrimitiveRoot.h}
 
 \section{Primality}
 	\kactlimport{FastEratosthenes.h}
+	\kactlimport{LinearSieve.h}
 	\kactlimport{MillerRabin.h}
 	\kactlimport{Factor.h}
 
@@ -20,7 +22,7 @@
 	\kactlimport{CRT.h}
 
 	\subsection{Bézout's identity}
-	For $a \neq $, $b \neq 0$, then $d=gcd(a,b)$ is the smallest positive integer for which there are integer solutions to
+	For $a \neq 0$, $b \neq 0$, then $d=gcd(a,b)$ is the smallest positive integer for which there are integer solutions to
 	$$ax+by=d$$
 	If $(x,y)$ is one solution, then all solutions are given by
 	$$\left(x+\frac{kb}{\gcd(a,b)}, y-\frac{ka}{\gcd(a,b)}\right), \quad k\in\mathbb{Z}$$
@@ -36,10 +38,34 @@
  \[ a=k\cdot (m^{2}-n^{2}),\ \,b=k\cdot (2mn),\ \,c=k\cdot (m^{2}+n^{2}), \]
  with $m > n > 0$, $k > 0$, $m \bot n$, and either $m$ or $n$ even.
 
+\section{Theorems}
+	\textbf{Fermat/Euler:} $a^{\phi(m)} \equiv 1 \pmod m$ for $\gcd(a,m)=1$, so $a^{-1} \equiv a^{p-2} \pmod p$.\\
+	\textbf{Power tower / huge exponents:} for any $a$ and $b \ge \log_2 m$:
+	$a^b \equiv a^{(b \bmod \phi(m)) + \phi(m)} \pmod m$ (no coprimality needed);
+	apply recursively for $a^{b^{c^{\dots}}}$ ($\phi$ reaches 1 in $O(\log m)$ steps).\\
+	\textbf{Wilson:} $p$ prime $\iff (p-1)! \equiv -1 \pmod p$.\\
+	\textbf{Hensel lifting:} if $f(x) \equiv 0 \pmod {p^k}$ and $f'(x) \not\equiv 0 \pmod p$ then
+	$x' = x - f(x) f'(x)^{-1}$ solves it mod $p^{k+1}$ (Newton). Solve mod each $p^k$, merge with CRT.\\
+	\textbf{Quadratic residues:} $a$ is a square mod odd prime $p$ iff $a^{(p-1)/2} \equiv 1$ (Euler's criterion).\\
+	\textbf{Frobenius / Chicken McNugget:} the largest number not of the form $ax+by$
+	($x, y \ge 0$, $\gcd(a,b)=1$) is $ab-a-b$; there are $\frac{(a-1)(b-1)}{2}$ such numbers.\\
+	$\gcd(a^m-1, a^n-1) = a^{\gcd(m,n)}-1$; $\gcd(F_m, F_n) = F_{\gcd(m,n)}$ (Fibonacci).
+
 \section{Primes}
 	$p=962592769$ is such that $2^{21} \mid p-1$, which may be useful. For hashing
 	use 970592641 (31-bit number), 31443539979727 (45-bit), 3006703054056749
-	(52-bit). There are 78498 primes less than 1\,000\,000.
+	(52-bit), $2^{61}-1$ (Mersenne). There are 78498 primes less than 1\,000\,000,
+	664579 below $10^7$, 5761455 below $10^8$, 50847534 below $10^9$; $\pi(n) \approx n/\ln n$.
+	Max prime gap below $10^9$ is 282, below $10^{18}$ it is $< 1500$.
+
+	NTT primes $c \cdot 2^k + 1$ (primitive root $g$): 998244353 ($119\cdot 2^{23}{+}1$, $g{=}3$),
+	167772161 ($5\cdot 2^{25}{+}1$, $g{=}3$), 469762049 ($7\cdot 2^{26}{+}1$, $g{=}3$),
+	1004535809 ($479\cdot 2^{21}{+}1$, $g{=}3$), 754974721 ($45\cdot 2^{24}{+}1$, $g{=}11$).
+	Other: $10^9{+}7$ ($g{=}5$), $10^9{+}9$ ($g{=}13$), $10^{18}{+}3$.
+
+	Handy primes: 100003, 200003, 300007, 400009, 500009, 600011, 700001, 800011, 900001,
+	1000003, 2000003, 3000017, 4100011, 5000011, 8000009, 9000011, 10000019, 20000003,
+	50000017, 50100007, 100000007, 100200011, 200100007, 250000019.
 
 	Primitive roots exist modulo any prime power $p^a$, except for $p = 2, a > 2$, and there are $\phi(\phi(p^a))$ many.
 	For $p = 2, a > 2$, the group $\mathbb Z_{2^a}^\times$ is instead isomorphic to $\mathbb Z_2 \times \mathbb Z_{2^{a-2}}$.
@@ -47,7 +73,11 @@
 \section{Estimates}
 	$\sum_{d|n} d = O(n \log \log n)$.
 
-	The number of divisors of $n$ is at most around 100 for $n < 5e4$, 500 for $n < 1e7$, 2000 for $n < 1e10$, 200\,000 for $n < 1e19$.
+	The number of divisors of $n$ is at most around 100 for $n < 5e4$, 500 for $n < 1e7$, 2000 for $n < 1e10$, 200\,000 for $n < 1e19$
+	(exact maxima: 1344 for $n \le 10^9$, 103680 for $n \le 10^{18}$).
+	A number $\le 10^{18}$ has at most 15 distinct prime factors.
+	$\sum_{i=1}^n \lfloor n/i \rfloor = O(n \log n)$ and $\lfloor n/i \rfloor$ takes $O(\sqrt n)$
+	distinct values: \texttt{for (l = 1; l <= n; l = r + 1) \{ r = n / (n / l); ... \}}.
 
 \section{Mobius Function}
 \[

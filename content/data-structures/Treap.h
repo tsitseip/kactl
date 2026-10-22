@@ -5,6 +5,8 @@
  * Description: A short self-balancing tree. It acts as a
  *  sequential container with log-time splits/joins, and
  *  is easy to augment with additional data.
+ * Usage: Node* t = 0; t = ins(t, new Node(5), 0); // at index 0
+ *  auto [l, r] = split(t, k); // first k elements | rest
  * Time: $O(\log N)$
  * Status: stress-tested
  */
@@ -20,8 +22,9 @@ struct Node {
 int cnt(Node* n) { return n ? n->c : 0; }
 void Node::recalc() { c = cnt(l) + cnt(r) + 1; }
 
-template<class F> void each(Node* n, F f) {
-	if (n) { each(n->l, f); f(n->val); each(n->r, f); }
+void each(Node* n, vector<int>& out) { // in-order values
+	if (n) each(n->l, out), out.push_back(n->val),
+		each(n->r, out);
 }
 
 pair<Node*, Node*> split(Node* n, int k) {

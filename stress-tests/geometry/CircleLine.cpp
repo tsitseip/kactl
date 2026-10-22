@@ -4,7 +4,6 @@
 #include "../../content/geometry/lineDistance.h"
 #include "../../content/geometry/CircleLine.h"
 
-typedef Point<double> P;
 int main() {
 	{
 		auto res = circleLine(P(0, 0), 1, P(-1, -1), P(1, 1));

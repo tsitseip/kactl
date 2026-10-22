@@ -11,6 +11,7 @@ help:
 	@echo "	make clean		- to clean up the build process"
 	@echo "	make veryclean		- to clean up and remove kactl.pdf"
 	@echo "	make test		- to run all the stress tests in stress-tests/"
+	@echo "	make test-int64		- the same, with #define int long long (our template)"
 	@echo "	make test-compiles	- to test compiling all headers"
 	@echo "	make help		- to show this information"
 	@echo "	make showexcluded	- to show files that are not included in the doc"
@@ -38,6 +39,9 @@ build:
 
 test:
 	./doc/scripts/run-all.sh .
+
+test-int64:
+	./doc/scripts/run-all-int64.sh .
 
 test-compiles:
 	./doc/scripts/compile-all.sh .

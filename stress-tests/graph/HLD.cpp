@@ -82,7 +82,7 @@ void testAgainstOld(int n, int iters, int queries) {
 				tree2[i].push_back({j, 0});
 			}
 		}
-		HLD<false> hld(tree1);
+		HLD hld(tree1);
 		old::HLD hld2(tree2);
 		hld.tree->set(0, n, 0);
 		for (int itr = 0; itr < queries; itr++) {
@@ -107,7 +107,7 @@ void testAgainstBrute(int n, int iters, int queries) {
 			tree1[i.first].push_back(i.second);
 			tree1[i.second].push_back(i.first);
 		}
-		HLD<false> hld(tree1);
+		HLD hld(tree1);
 		bruteforce hld2(tree1);
 		hld.tree->set(0, n, 0);
 		for (int itr = 0; itr < queries; itr++) {

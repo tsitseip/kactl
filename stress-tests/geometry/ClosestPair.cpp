@@ -1,4 +1,6 @@
 #include "../utilities/template.h"
+typedef ll T;
+#define POINT_T
 
 #include "../../content/geometry/ClosestPair.h"
 

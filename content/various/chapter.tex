@@ -3,7 +3,6 @@
 \section{Intervals}
 	\kactlimport{IntervalContainer.h}
 	\kactlimport{IntervalCover.h}
-	\kactlimport{ConstantIntervals.h}
 
 \section{Misc. algorithms}
 	\kactlimport{TernarySearch.h}
@@ -13,6 +12,40 @@
 \section{Dynamic programming}
 	\kactlimport{KnuthDP.h}
 	\kactlimport{DivideAndConquerDP.h}
+	\kactlimport{SMAWK.h}
+	\kactlimport{SlopeTrick.h}
+	\subsection{Aliens trick (WQS binary search)}
+		\label{sec:aliens}
+		Need the best cost $g(k)$ using \emph{exactly} $k$ items/groups, $g$ convex in $k$, but the DP
+		without the count is easy. Add a penalty $\lambda$ per item and solve
+		\texttt{solve(lam) = \{min(cost + lam*cnt), min cnt among optimal\}};
+		cnt decreases as $\lambda$ grows. Integer costs: integer $\lambda$ is enough.
+		\begin{lstlisting}
+ll lo = -C, hi = C; // C > max |g(k+1) - g(k)|
+while (lo < hi) {
+	ll m = lo + (hi - lo) / 2;
+	if (solve(m).second <= k) hi = m; else lo = m + 1;
+}
+ll ans = solve(lo).first - lo * k;
+		\end{lstlisting}
+		For a concave $g$ (maximum), use $-\lambda$ or negate costs.
+	\subsection{Sum over subsets, other tricks}
+		SOS DP, $D[S] = \sum_{T \subseteq S} A[T]$ for all $S$ in $O(K 2^K)$ (start with $D = A$;
+		supersets: test \texttt{!(i >{}> b \& 1)} and add \texttt{D[i | 1 <{}< b]}; inverse: subtract):
+		\begin{lstlisting}
+for (int b = 0; b < K; b++)
+	for (int i = 0; i < 1 << K; i++)
+		if (i >> b & 1) D[i] += D[i ^ 1 << b];
+		\end{lstlisting}
+		Bitmask DP over submasks of all masks: $O(3^n)$. Knapsack with bitset:
+		\texttt{b |= b <{}< w}; size known at runtime via
+		\begin{lstlisting}
+template<int L = 1> void go(int n) { // L >= n, L <= MAXN
+	if (L < n) return go<min(2 * L, MAXN)>(n);
+	bitset<L> b; /* ... */ }
+		\end{lstlisting}
+		Digit DP: state (position, tight, started, ...) from the most significant digit.
+		Broken profile: process cells row-major, state = mask of the last $m$ cells.
 
 \section{Debugging tricks}
 	\begin{itemize}
@@ -20,6 +53,9 @@
 			Similarly one can catch SIGABRT (assertion failures) and SIGFPE (zero divisions).
 			\verb@_GLIBCXX_DEBUG@ failures generate SIGABRT (or SIGSEGV on gcc 5.4.0 apparently).
 		\item \verb@feenableexcept(29);@ kills the program on NaNs (\texttt 1), 0-divs (\texttt 4), infinities (\texttt 8) and denormals (\texttt{16}).
+		\item Compile with \verb@-D_GLIBCXX_DEBUG@ (checked \texttt{vector[]}, iterators) and
+			\verb@-fsanitize=address,undefined@ (out of bounds, overflow, use after free).
+		\item \verb@#define dbg(x) cerr << #x << " = " << (x) << endl@
 	\end{itemize}
 
 \section{Optimization tricks}
@@ -29,7 +65,10 @@
 			\item \verb@x & -x@ is the least bit in \texttt{x}.
 			\item \verb@for (int x = m; x; ) { --x &= m; ... }@ loops over all subset masks of \texttt{m} (except \texttt{m} itself).
 			\item \verb@c = x&-x, r = x+c; (((r^x) >> 2)/c) | r@ is the next number after \texttt{x} with the same number of bits set.
-			\item \verb@rep(b,0,K) rep(i,0,(1 << K))@ \\ \verb@  if (i & 1 << b) D[i] += D[i^(1 << b)];@ computes all sums of subsets.
+			\item Sums over all subsets of every mask: SOS DP (Dynamic programming above).
+			\item \verb@__builtin_popcountll@, \verb@__builtin_ctzll@, \verb@__builtin_clzll@,
+				\verb@__lg(x)@ (= floor log2, $x > 0$).
+			\item Gray code: \verb@i ^ (i >> 1)@; inverse: \verb@int i = 0; for (; g; g >>= 1) i ^= g;@
 		\end{itemize}
 	\subsection{Pragmas}
 		\begin{itemize}
@@ -39,8 +78,3 @@
 		\end{itemize}
 	\kactlimport{FastMod.h}
 	\kactlimport{FastInput.h}
-	\kactlimport{BumpAllocator.h}
-	\kactlimport{SmallPtr.h}
-	\kactlimport{BumpAllocatorSTL.h}
-	% \kactlimport{Unrolling.h}
-	\kactlimport{SIMD.h}

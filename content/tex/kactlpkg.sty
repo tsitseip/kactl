@@ -12,7 +12,8 @@
 \usepackage{tocloft}                    % Custom Table of Contents
 \usepackage{titletoc}                   % Design control over Table of Contents
 \usepackage{ifthen}                     % To enable some conditional programming in LaTeX
-\usepackage{courier}                    % To get bold typewriter typeface
+\usepackage[T1]{fontenc}
+\usepackage[varqu]{zi4}                 % Inconsolata: narrow, readable, has bold
 \usepackage{graphicx}                   % To rotate page numbers
 \usepackage{fix-cm}                     % Large font sizes
 \usepackage{paralist}                   % For compact enumerations
@@ -41,7 +42,7 @@
 }
 
 \newcommand{\enablecolors}{
-	\lstset{basicstyle=\footnotesize\ttfamily\color{mygreen}}
+	\lstset{basicstyle=\small\ttfamily\color{mygreen}}
 	\lstset{commentstyle=\color{darkgray}\normalfont\itshape}
 	\lstset{keywordstyle=\color{myblue}}
 	\lstset{identifierstyle=\color{black}}
@@ -80,7 +81,7 @@
 \pagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}
 \headheight 25pt
-\lhead{\@unishort}
+\lhead{\@teamname}
 \chead{\immediate\write18{python3 content/tex/preprocessor.py --print-header "\splitbotmarks\hdrmark|\botmarks\hdrmark" -o \@builddir/header2.tmp}\immediate\input{\@builddir/header2.tmp}}
 \rhead{\thepage}
 %\lhead{}\chead{\thepage}\rhead{}
@@ -135,12 +136,12 @@
                                    {\normalfont\LARGE\bfseries}}
 
 \renewcommand\subsection{\@startsection{subsection}{2}{\z@}
-	{1ex\@plus -1ex \@minus -.3ex}
+	{-1ex\@plus -1ex \@minus -.3ex}
 	{.2ex}
 	{\normalfont\large\bfseries}}
 
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}
-	{1ex\@plus -1ex \@minus -.3ex}
+	{-1ex\@plus -1ex \@minus -.3ex}
 	{1ex \@plus .2ex}
 	{\normalfont\large\bfseries}}
 
@@ -199,9 +200,10 @@
 \lstset{tabsize=2}
 \lstset{showstringspaces=false}
 \lstset{breaklines=true}
-\lstset{basicstyle=\footnotesize\ttfamily}
+\lstset{basicstyle=\small\ttfamily}
+\lstset{basewidth=0.5em} % 63 columns of Inconsolata at \small fit a column
 \lstset{commentstyle=\normalfont\itshape}
-\lstset{literate={^}{\caret}{1} {~}{\tilde}{1} {\{}{\nicelbrace}{1} {\}}{\nicerbrace}{1}}
+\lstset{literate={~}{\tilde}{1}}
 \lstset{emptylines=*1}
 \lstset{inputencoding=utf8}
 \lstset{aboveskip=3pt}
@@ -236,7 +238,7 @@
 	\pagestyle{fancy}
 }
 
-\newcommand{\kactlref}[1]{
+\newcommand{\kactlref}[2]{
 	\ifthenelse{\boolean{appendixmode}}{}{
 		\ifnum \value{section} > 0
 			\addcontentsline{ptc}{subsection}{\texttt{#1}\hspace{0.2em}}
@@ -244,7 +246,52 @@
 			\addcontentsline{ptc}{section}{\texttt{#1}\hspace{0.2em}}
 		\fi
 	}
+	\addcontentsline{kix}{kixentry}{#2}%
+	\label{kactl:#2}%
 	\marks\hdrmark{#1}
+}
+
+% ---- One-page index, built from the .kix file of the previous run ----
+% Every chapter, section, subsection and code file adds an entry.
+\newif\ifkixfirst
+\newif\ifkixcolon % entries right after a chapter title get no colon
+\newcommand\l@kixchap[2]{\par\addvspace{3pt}\noindent
+	{\bfseries\normalsize #1\hfill #2}\par\nopagebreak\noindent
+	\kixfirsttrue\kixcolonfalse}
+\newcommand\kixsep{\ifkixfirst\kixfirstfalse\ifkixcolon:\ \fi\else, \fi}
+\newcommand\l@kixsec[2]{\par\noindent\hangindent=0.8em
+	{\bfseries #1}\,{\scriptsize #2}\kixfirsttrue\kixcolontrue}
+\newcommand\l@kixsub[2]{\kixsep\textit{#1}\,{\scriptsize #2}}
+\newcommand\l@kixentry[2]{\kixsep#1\,{\scriptsize #2}}
+% \kref{File}: "File page" pointer for the quick guide
+\newcommand{\kref}[1]{#1\,{\scriptsize\bfseries\pageref{kactl:#1}}}
+% \sref{label}{text}: same for a text section with \label{label}
+\newcommand{\sref}[2]{#2\,{\scriptsize\bfseries\pageref{#1}}}
+\let\kactl@chapter\chapter
+\renewcommand\chapter[1]{\kactl@chapter{#1}%
+	\addcontentsline{kix}{kixchap}{\thechapter\quad #1}}
+\let\kactl@section\section
+\renewcommand\section[1]{\myneedspace{6\baselineskip}\kactl@section{#1}%
+	\addcontentsline{kix}{kixsec}{#1}}
+\let\kactl@subsection\subsection
+\renewcommand\subsection[1]{\myneedspace{4\baselineskip}\kactl@subsection{#1}%
+	\addcontentsline{kix}{kixsub}{#1}}
+
+\newcommand{\makeindexpage}[1]{ % #1 = quick guide
+	\setcounter{page}{1}
+	\begin{multicols*}{3}[\centerline{{\LARGE\bfseries \@teamname}\quad
+		{\large \@teammembers}\quad
+		{\large\itshape \@unilong\ -- \@contestname\ \@contestdate}}
+		\vspace{1mm}]
+	\thispagestyle{fancy}
+	\footnotesize
+	\setlength{\parskip}{0pt}
+	\raggedright
+	\@starttoc{kix}
+	\par\vspace{2mm}\hrule\vspace{1mm}
+	#1
+	\end{multicols*}
+	\clearpage
 }
 
 % Like \needspace, except with flush bottoms.
@@ -344,7 +391,7 @@
 
 
 \newcommand{\codeheader}[2]{
-	{\par\noindent\footnotesize{\textbf{#1:} #2\par}}
+	{\par\noindent\small{\textbf{#1:} #2\par}}
 }
 
 \long\def\@makecaption#1#2{
@@ -353,7 +400,7 @@
 	\ifthenelse{\boolean{hasusage}}{\codeheader{Usage}{\@defusage}}{}
 	\ifthenelse{\boolean{hasmemory}}{\codeheader{Memory}{\@defmemory}}{}
 	\ifthenelse{\boolean{hastime}}{\codeheader{Time}{\@deftime}}{}
-	\ifthenelse{\boolean{hasleftcaption}}{\vspace{0pt}}{\vspace{-5pt}}
+	\ifthenelse{\boolean{hasleftcaption}}{\vspace{0pt}}{\vspace{-1pt}}
 	\tiny
 	\texttt{\@leftcaption} \hfill \@rightcaption
 }

@@ -28,6 +28,7 @@ Fails if the solution is not unique.
 
 If $|d_i| > |p_i| + |q_{i-1}|$ for all $i$, or $|d_i| > |p_{i-1}| + |q_i|$, or the matrix is positive definite,
 the algorithm is numerically stable and neither \texttt{tr} nor the check for \texttt{diag[i] == 0} is needed.
+ * Usage: vector<T> x = tridiagonal(diag, super, sub, b);
  * Time: O(N)
  * Status: Brute-force tested mod 5 and 7 and stress-tested for real matrices obeying the criteria above.
  */
@@ -36,8 +37,8 @@ the algorithm is numerically stable and neither \texttt{tr} nor the check for \t
 typedef double T;
 vector<T> tridiagonal(vector<T> diag, const vector<T>& super,
 		const vector<T>& sub, vector<T> b) {
-	int n = sz(b); vi tr(n);
-	rep(i,0,n-1) {
+	int n = b.size(); vector<int> tr(n);
+	for (int i = 0; i < n-1; i++) {
 		if (abs(diag[i]) < 1e-9 * abs(super[i])) { // diag[i] == 0
 			b[i+1] -= b[i] * diag[i+1] / super[i];
 			if (i+2 < n) b[i+2] -= b[i] * sub[i+1] / super[i];

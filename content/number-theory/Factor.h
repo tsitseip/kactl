@@ -5,6 +5,7 @@
  * Source: own
  * Description: Pollard-rho randomized factorization algorithm. Returns prime
  * factors of a number, in arbitrary order (e.g. 2299 -> \{11, 19, 11\}).
+ * Usage: vector<ull> f = factor(n); // unsorted, with repeats
  * Time: $O(n^{1/4})$, less for numbers with small factors.
  * Status: stress-tested
  *
@@ -66,6 +67,6 @@ vector<ull> factor(ull n) {
 	if (isPrime(n)) return {n};
 	ull x = pollard(n);
 	auto l = factor(x), r = factor(n / x);
-	l.insert(l.end(), all(r));
+	l.insert(l.end(), r.begin(), r.end());
 	return l;
 }

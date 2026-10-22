@@ -6,24 +6,25 @@
  * Description: Transform to a basis with fast convolutions of the form
  * $\displaystyle c[z] = \sum\nolimits_{z = x \oplus y} a[x] \cdot b[y]$,
  * where $\oplus$ is one of AND, OR, XOR. The size of $a$ must be a power of two.
+ * Keep only the line(s) marked with your operation.
+ * Usage: vector<int> c = conv(a, b); // sz power of 2; AND (or OR/XOR)
  * Time: O(N \log N)
  * Status: stress-tested
  */
 #pragma once
 
-void FST(vi& a, bool inv) {
-	for (int n = sz(a), step = 1; step < n; step *= 2) {
-		for (int i = 0; i < n; i += 2 * step) rep(j,i,i+step) {
-			int &u = a[j], &v = a[j + step]; tie(u, v) =
-				inv ? pii(v - u, u) : pii(v, u + v); // AND
-				// inv ? pii(v, u - v) : pii(u + v, u); // OR /// include-line
-				// pii(u + v, u - v);                   // XOR /// include-line
+void FST(vector<int>& a, bool inv) {
+	for (int n = a.size(), s = 1; s < n; s *= 2)
+		for (int i = 0; i < n; i++) if (!(i & s)) {
+			int &u = a[i], &v = a[i + s], x = u, y = v;
+			if (inv) u = y - x, v = x; else u = y, v = x + y; // AND
+			// if (inv) u = y, v = x - y; else u = x + y, v = x; // OR /// include-line
+			// u = x + y, v = x - y; // XOR /// include-line
 		}
-	}
-	// if (inv) for (int& x : a) x /= sz(a); // XOR only /// include-line
+	// if (inv) for (int& x : a) x /= (int)a.size(); // XOR only /// include-line
 }
-vi conv(vi a, vi b) {
+vector<int> conv(vector<int> a, vector<int> b) {
 	FST(a, 0); FST(b, 0);
-	rep(i,0,sz(a)) a[i] *= b[i];
+	for (int i = 0; i < a.size(); i++) a[i] *= b[i];
 	FST(a, 1); return a;
 }

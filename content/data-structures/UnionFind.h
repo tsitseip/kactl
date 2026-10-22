@@ -4,12 +4,13 @@
  * License: CC0
  * Source: folklore
  * Description: Disjoint-set data structure.
+ * Usage: UF uf(n); uf.join(a, b); uf.sameSet(a, b); uf.size(a);
  * Time: $O(\alpha(N))$
  */
 #pragma once
 
 struct UF {
-	vi e;
+	vector<int> e;
 	UF(int n) : e(n, -1) {}
 	bool sameSet(int a, int b) { return find(a) == find(b); }
 	int size(int x) { return -e[find(x)]; }

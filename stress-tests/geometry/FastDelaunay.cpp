@@ -1,15 +1,17 @@
 #include "../utilities/template.h"
+typedef ll T;
+#define POINT_T
 
 // #define TEST_PERF
 
 #include "../../content/geometry/ConvexHull.h"
 #include "../../content/geometry/PolygonArea.h"
 
-#define P P2
-#include "../../content/geometry/circumcircle.h"
-#undef P
-
-P2 top(P x) { return P2((double)x.x, (double)x.y); }
+// exact: is d strictly inside the circumcircle of ccw triangle abc?
+bool inCirc(P a, P b, P c, P d) {
+	__int128 ax=a.x-d.x, ay=a.y-d.y, bx=b.x-d.x, by=b.y-d.y, cx=c.x-d.x, cy=c.y-d.y;
+	return (ax*ax+ay*ay)*(bx*cy-by*cx) - (bx*bx+by*by)*(ax*cy-ay*cx) + (cx*cx+cy*cy)*(ax*by-ay*bx) > 0;
+}
 
 struct Bumpalloc {
 	char buf[450 << 20];
@@ -114,10 +116,8 @@ int main1() {
 			ll ar = ps[i].cross(ps[j], ps[k]);
 			if (ar <= 0) fail();
 			sumar += ar;
-			P2 c = ccCenter(top(ps[i]), top(ps[j]), top(ps[k]));
-			double ra = ccRadius(top(ps[i]), top(ps[j]), top(ps[k]));
 			rep(l,0,N) {
-				if ((top(ps[l]) - c).dist() < ra - 1e-5) fail();
+				if (inCirc(ps[i], ps[j], ps[k], ps[l])) fail();
 			}
 		});
 		if (!allColinear) {

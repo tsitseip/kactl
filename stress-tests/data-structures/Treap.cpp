@@ -65,11 +65,9 @@ int main() {
 		exp.erase(exp.begin() + i, exp.begin() + j);
 		exp.insert(exp.begin() + nk, all(iv));
 
-		int ind = 0;
-		each(n, [&](int x) {
-			// cerr << x << ' ';
-			assert(x == exp[ind++]);
-		});
+		vi got;
+		each(n, got);
+		assert(got == exp);
 		// cerr << endl;
 	}
 	cout<<"Tests passed!"<<endl;

@@ -2,22 +2,50 @@
 \usepackage{kactlpkg}
 \kactlcontentdir{content}
 
-\university{KTH}{KTH Royal Institute of Technology}{kth}
-\team{Omogen Heap}{Simon Lindholm, Johan Sannemo, Mårten Wiman}
-% \contest{ACM-ICPC World Finals 2017}{May 24, 2017}
-\contest{\ }{\today}
+% ---- Fill in before printing ----
+\university{ICPC}{Your University}{kth}
+\team{Team Name}{Member One, Member Two, Member Three}
+\contest{ICPC notebook}{\today}
 % \enablecolors
 
 \begin{document}
-	\maketeampage
-	% Small KACTL header on the first page:
-	% \maketitle{``One Last Time'' Edition}{\today}
+	% Page 1: index of everything (generated on the previous LaTeX run,
+	% so build twice: `make kactl`) plus a quick "what to use" guide.
+	\makeindexpage{
+		{\bfseries\small Quick guide}\par
+		\begin{itemize}[leftmargin=0.8em, noitemsep, topsep=0pt, parsep=0pt]
+		\item Range query + point update: \kref{SegmentTree}, \kref{FenwickTree};
+			range update: \kref{LazySegmentTree}; static min: \kref{RMQ}
+		\item $k$-th smallest / count in a range, old versions: \kref{PersistentSegmentTree};
+			offline ranges: \kref{MoQueries}
+		\item Order statistics: \kref{OrderStatisticTree}; split/merge/reverse sequences: \kref{Treap}
+		\item Convex hull trick: \kref{LineContainer}, \kref{LiChao}; other DP speedups:
+			\kref{DivideAndConquerDP}, \kref{KnuthDP}, \kref{SMAWK}, \kref{SlopeTrick}, \sref{sec:aliens}{Aliens}
+		\item Undo / edge deletions: \kref{UnionFindRollback}, \kref{DynamicConnectivity}
+		\item Negative weights: \kref{BellmanFord}, \kref{FloydWarshall}; terminals: \kref{SteinerTree}
+		\item Max flow: \kref{Dinic}, \kref{PushRelabel}; with costs: \kref{MinCostMaxFlow};
+			cuts: \kref{GlobalMinCut}, \kref{GomoryHu}; modelling: \sref{sec:konig}{König/flows}
+		\item Matching: \kref{HopcroftKarp}, weighted \kref{WeightedMatching}, general \kref{GeneralMatching}
+		\item SCC, 2-SAT, bridges: \kref{SCC}, \kref{2sat}, \kref{BiconnectedComponents};
+			Euler path \kref{EulerWalk}; dominators \kref{DominatorTree}
+		\item Tree paths: \kref{LCA}, \kref{HLD}, \kref{CentroidDecomposition};
+			changing forest: \kref{LinkCutTree}; subset of vertices: \kref{CompressTree}
+		\item Convolution: \kref{FastFourierTransform}, \kref{NumberTheoreticTransform},
+			any mod \kref{FastFourierTransformMod}; xor/and/or: \kref{FastSubsetTransform};
+			series inv/log/exp: \kref{PolyOps}
+		\item Recurrences: \kref{BerlekampMassey} + \kref{LinearRecurrence}, \kref{Matrix}
+		\item Linear systems: \kref{SolveLinear}, mod $p$ \kref{SolveLinearMod},
+			mod 2 \kref{SolveLinearBinary}, xor basis \kref{XorBasis}; LP: \kref{Simplex}
+		\item Number theory: \kref{MillerRabin}, \kref{Factor}, \kref{LinearSieve}, \kref{CRT},
+			\kref{ModLog}, \kref{ModSqrt}, \kref{PrimitiveRoot}; $\binom nk$: \kref{Binomial}, \sref{sec:binom}{identities}
+		\item Strings: \kref{KMP}, \kref{Zfunc}, \kref{AhoCorasick}, \kref{SuffixArray},
+			\kref{SuffixAutomaton}, \kref{Hashing}; palindromes \kref{Manacher}, \kref{PalindromicTree}
+		\item Geometry: \kref{ConvexHull}, \kref{InsidePolygon}, \kref{PointInsideHull}, \kref{HalfPlane},
+			\kref{MinkowskiSum}, \kref{PolygonUnion}, \kref{CircleUnion}, \kref{ClosestPair},
+			\kref{FastDelaunay}, \kref{PlanarFaces}; lattice points: \sref{sec:pick}{Pick}
+		\end{itemize}
+	}
 	\begin{multicols*}{3}
-	\thispagestyle{fancy}
-	% Table of contents, without subsections:
-	\setcounter{tocdepth}{0}
-	\tableofcontents
-
 	\kactlchapter{contest}
 	\kactlchapter{math}
 	\kactlchapter{data-structures}
@@ -28,9 +56,6 @@
 	\kactlchapter{geometry}
 	\kactlchapter{strings}
 	\kactlchapter{various}
-	\end{multicols*}
-
-	\begin{multicols*}{3}
-	\kactlchapter{appendix}
+	\kactlchapter{tips}
 	\end{multicols*}
 \end{document}

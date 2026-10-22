@@ -1,6 +1,5 @@
 #pragma once
 #include <cstdint>
-#include <cassert>
 #include <random>
 
 // returns random int in [0, hi), like Python's random.randrange

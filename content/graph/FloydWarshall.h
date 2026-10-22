@@ -7,6 +7,8 @@
  * Input is an distance matrix $m$, where $m[i][j] = \texttt{inf}$ if $i$ and $j$ are not adjacent.
  * As output, $m[i][j]$ is set to the shortest distance between $i$ and $j$, \texttt{inf} if no path,
  * or \texttt{-inf} if the path goes through a negative-weight cycle.
+ * Usage: vector<vector<ll>> m(n, vector<ll>(n, inf));
+ *  m[a][b] = min(m[a][b], w); floydWarshall(m);
  * Time: O(N^3)
  * Status: slightly tested
  */
@@ -14,13 +16,18 @@
 
 const ll inf = 1LL << 62;
 void floydWarshall(vector<vector<ll>>& m) {
-	int n = sz(m);
-	rep(i,0,n) m[i][i] = min(m[i][i], 0LL);
-	rep(k,0,n) rep(i,0,n) rep(j,0,n)
-		if (m[i][k] != inf && m[k][j] != inf) {
-			auto newDist = max(m[i][k] + m[k][j], -inf);
-			m[i][j] = min(m[i][j], newDist);
-		}
-	rep(k,0,n) if (m[k][k] < 0) rep(i,0,n) rep(j,0,n)
-		if (m[i][k] != inf && m[k][j] != inf) m[i][j] = -inf;
+	int n = m.size();
+	for (int i = 0; i < n; i++) m[i][i] = min(m[i][i], 0LL);
+	for (int k = 0; k < n; k++)
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++)
+				if (m[i][k] != inf && m[k][j] != inf) {
+					auto newDist = max(m[i][k] + m[k][j], -inf);
+					m[i][j] = min(m[i][j], newDist);
+				}
+	for (int k = 0; k < n; k++)
+		if (m[k][k] < 0)
+			for (int i = 0; i < n; i++)
+				for (int j = 0; j < n; j++)
+					if (m[i][k] != inf && m[k][j] != inf) m[i][j] = -inf;
 }

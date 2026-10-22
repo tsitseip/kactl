@@ -6,36 +6,39 @@
  * Description: Finds strongly connected components in a
  * directed graph. If vertices $u, v$ belong to the same component,
  * we can reach $u$ from $v$ and vice versa.
- * Usage: scc(graph, [\&](vi\& v) { ... }) visits all components
- * in reverse topological order. comp[i] holds the component
- * index of a node (a component only has edges to components with
- * lower index). ncomps will contain the number of components.
+ * Components are numbered in reverse topological order: an edge
+ * $u \to v$ implies comp[u] $\ge$ comp[v] (a component only has edges
+ * to components with lower index), so the condensation DAG can be
+ * processed by iterating c = 0..ncomps-1.
+ * Usage: scc(g); // g: vector<vector<int>> adjacency list
+ *  comp[v] = component of v, comps[c] = vertices of c, ncomps
  * Time: O(E + V)
  * Status: Bruteforce-tested for N <= 5
  */
 #pragma once
 
-vi val, comp, z, cont;
+vector<int> val, comp, z;
+vector<vector<int>> comps;
 int Time, ncomps;
-template<class G, class F> int dfs(int j, G& g, F& f) {
+int dfs(int j, vector<vector<int>>& g) {
 	int low = val[j] = ++Time, x; z.push_back(j);
-	for (auto e : g[j]) if (comp[e] < 0)
-		low = min(low, val[e] ?: dfs(e,g,f));
+	for (int e : g[j]) if (comp[e] < 0)
+		low = min(low, val[e] ?: dfs(e, g));
 
 	if (low == val[j]) {
+		comps.emplace_back();
 		do {
 			x = z.back(); z.pop_back();
 			comp[x] = ncomps;
-			cont.push_back(x);
+			comps.back().push_back(x);
 		} while (x != j);
-		f(cont); cont.clear();
 		ncomps++;
 	}
 	return val[j] = low;
 }
-template<class G, class F> void scc(G& g, F f) {
-	int n = sz(g);
-	val.assign(n, 0); comp.assign(n, -1);
+void scc(vector<vector<int>>& g) {
+	int n = g.size();
+	val.assign(n, 0); comp.assign(n, -1); comps.clear();
 	Time = ncomps = 0;
-	rep(i,0,n) if (comp[i] < 0) dfs(i, g, f);
+	for (int i = 0; i < n; i++) if (comp[i] < 0) dfs(i, g);
 }

@@ -5,14 +5,14 @@
  * Source: https://github.com/spaghetti-source/algorithm/blob/master/geometry/_geom.cc#L744
  * Description: Returns the area of the intersection of a circle with a
  * ccw polygon.
+ * Usage: double A = circlePoly(c, r, poly); // poly ccw
  * Time: O(n)
  * Status: Tested on GNYR 2019 Gerrymandering, stress-tested
  */
 #pragma once
 
-#include "../../content/geometry/Point.h"
+#include "Point.h"
 
-typedef Point<double> P;
 #define arg(p, q) atan2(p.cross(q), p.dot(q))
 double circlePoly(P c, double r, vector<P> ps) {
 	auto tri = [&](P p, P q) {
@@ -27,7 +27,7 @@ double circlePoly(P c, double r, vector<P> ps) {
 		return arg(p,u) * r2 + u.cross(v)/2 + arg(v,q) * r2;
 	};
 	auto sum = 0.0;
-	rep(i,0,sz(ps))
-		sum += tri(ps[i] - c, ps[(i + 1) % sz(ps)] - c);
+	for (int i = 0; i < ps.size(); i++)
+		sum += tri(ps[i] - c, ps[(i + 1) % (int)ps.size()] - c);
 	return sum;
 }

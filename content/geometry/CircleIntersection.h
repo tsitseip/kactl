@@ -4,13 +4,13 @@
  * License: CC0
  * Description: Computes the pair of points at which two circles intersect.
  * Returns false in case of no intersection.
+ * Usage: pair<P, P> o; if (circleInter(a, b, r1, r2, \&o)) ...
  * Status: stress-tested
  */
 #pragma once
 
 #include "Point.h"
 
-typedef Point<double> P;
 bool circleInter(P a,P b,double r1,double r2,pair<P, P>* out) {
 	if (a == b) { assert(r1 != r2); return false; }
 	P vec = b - a;

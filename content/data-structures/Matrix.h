@@ -3,38 +3,31 @@
  * Date: 2009-08-03
  * License: CC0
  * Source: My head
- * Description: Basic operations on square matrices.
- * Usage: Matrix<int, 3> A;
- *  A.d = {{{{1,2,3}}, {{4,5,6}}, {{7,8,9}}}};
- *  array<int, 3> vec = {1,2,3};
- *  vec = (A^N) * vec;
- * Status: tested
+ * Description: Matrix product and power modulo mod, e.g. for linear
+ *  recurrences: if $v_{i+1} = A v_i$ then $v_n = A^n v_0$ (a vector is an
+ *  $n \times 1$ matrix). For doubles change ll to double and drop \% mod.
+ * Usage: Mat A = {{1,1},{1,0}}; Mat B = pw(A, n); // B[0][1] = Fib(n)
+ * Time: O(N^3 \log p)
+ * Status: stress-tested
  */
 #pragma once
 
-template<class T, int N> struct Matrix {
-	typedef Matrix M;
-	array<array<T, N>, N> d{};
-	M operator*(const M& m) const {
-		M a;
-		rep(i,0,N) rep(j,0,N)
-			rep(k,0,N) a.d[i][k] += d[i][j] * m.d[j][k];
-		return a;
-	}
-	array<T, N> operator*(const array<T, N>& vec) const {
-		array<T, N> ret{};
-		rep(i,0,N) rep(j,0,N) ret[i] += d[i][j] * vec[j];
-		return ret;
-	}
-	M operator^(ll p) const {
-		assert(p >= 0);
-		M a, b(*this);
-		rep(i,0,N) a.d[i][i] = 1;
-		while (p) {
-			if (p&1) a = a*b;
-			b = b*b;
-			p >>= 1;
-		}
-		return a;
-	}
-};
+const ll mod = 1e9 + 7;
+typedef vector<vector<ll>> Mat;
+Mat operator*(const Mat& a, const Mat& b) {
+	int n = a.size(), k = b.size(), m = b[0].size();
+	Mat c(n, vector<ll>(m));
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < k; j++)
+			if (a[i][j])
+				for (int l = 0; l < m; l++)
+					c[i][l] = (c[i][l] + a[i][j] * b[j][l]) % mod;
+	return c;
+}
+Mat pw(Mat a, ll p) {
+	Mat r((int)a.size(), vector<ll>(a.size()));
+	for (int i = 0; i < a.size(); i++) r[i][i] = 1;
+	for (; p; p /= 2, a = a * a)
+		if (p & 1) r = r * a;
+	return r;
+}

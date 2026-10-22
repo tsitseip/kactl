@@ -3,18 +3,23 @@
  * Date: 2009-02-26
  * License: CC0
  * Source: My head with inspiration from tinyKACTL
- * Description: Class to handle points in the plane.
- * 	T can be e.g. double or long long. (Avoid int.)
+ * Description: Class to handle points in the plane. All geometry code
+ * uses this \texttt{P}. Set \texttt{T = ll} for exact integer algorithms
+ * (hulls, inside tests); \texttt{double} is exact for integer
+ * coordinates up to $\sim 3\cdot 10^7$ (products below $2^{53}$).
+ * Functions returning new points (intersections, rotations) need double.
+ * Usage: P a(1, 2), b(3, 4); T cr = a.cross(b); double d = (a-b).dist();
  * Status: Works fine, used a lot
  */
 #pragma once
 
-template <class T> int sgn(T x) { return (x > 0) - (x < 0); }
-template<class T>
-struct Point {
-	typedef Point P;
+#ifndef POINT_T /// exclude-line
+typedef double T; // or ll / long double
+#endif /// exclude-line
+int sgn(T x) { return (x > 0) - (x < 0); }
+struct P {
 	T x, y;
-	explicit Point(T x=0, T y=0) : x(x), y(y) {}
+	explicit P(T x=0, T y=0) : x(x), y(y) {}
 	bool operator<(P p) const { return tie(x,y) < tie(p.x,p.y); }
 	bool operator==(P p) const { return tie(x,y)==tie(p.x,p.y); }
 	P operator+(P p) const { return P(x+p.x, y+p.y); }

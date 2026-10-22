@@ -5,6 +5,7 @@
  * Source: folklore
  * Description: Operators for modular arithmetic. You need to set {\tt mod} to
  * some number first and then you can use the structure.
+ * Usage: Mod a(5), b(3); Mod c = a / b, d = a ^ 10; // c.x
  */
 #pragma once
 

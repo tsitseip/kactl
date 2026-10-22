@@ -6,10 +6,12 @@
  * Description: Hash map with mostly the same API as unordered\_map, but \tilde
  * 3x faster. Uses 1.5x memory.
  * Initial capacity must be a power of 2 (if provided).
+ * Usage: h[key] = 7; if (h.find(key) != h.end()) ...
  */
 #pragma once
 
-#include <bits/extc++.h> /** keep-include */
+#include <bits/extc++.h> /** keep-include */ // above #define int
+
 // To use most bits rather than just the lowest ones:
 struct chash { // large odd number for C
 	const uint64_t C = ll(4e18 * acos(0)) | 71;

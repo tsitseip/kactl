@@ -4,6 +4,7 @@
  * License: CC0
  * Source: https://codeforces.com/blog/entry/58747
  * Description: Finds the closest pair of points.
+ * Usage: auto [a, b] = closest(pts); // needs >= 2 points
  * Time: O(n \log n)
  * Status: stress-tested
  */
@@ -11,15 +12,15 @@
 
 #include "Point.h"
 
-typedef Point<ll> P;
 pair<P, P> closest(vector<P> v) {
-	assert(sz(v) > 1);
+	assert((int)v.size() > 1);
 	set<P> S;
-	sort(all(v), [](P a, P b) { return a.y < b.y; });
-	pair<ll, pair<P, P>> ret{LLONG_MAX, {P(), P()}};
+	sort(v.begin(), v.end(), [](P a, P b) { return a.y < b.y; });
+	pair<T, pair<P, P>> ret{numeric_limits<T>::max(),
+		{P(), P()}};
 	int j = 0;
 	for (P p : v) {
-		P d{1 + (ll)sqrt(ret.first), 0};
+		P d{1 + (T)sqrt((double)ret.first), 0};
 		while (v[j].y <= p.y - d.x) S.erase(v[j++]);
 		auto lo = S.lower_bound(p - d), hi = S.upper_bound(p + d);
 		for (; lo != hi; ++lo)

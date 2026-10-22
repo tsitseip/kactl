@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
+#include <cassert>
 using namespace std;
 
-#define rep(i, a, b) for(int i = a; i < int(b); ++i)
+#define rep(i, a, b) for(int i = a; i < (int)(b); ++i)
 #define all(x) x.begin(), x.end()
 #define sz(x) (int)(x).size()
 
@@ -33,7 +34,6 @@ bool insidePolygon(It begin, It end, const P& p,
 	return n&1; //inside if odd number of intersections
 }
 }
-typedef Point<double> P;
 bool eq(P a, P b) {
 	return (a-b).dist()<EPS;
 }
